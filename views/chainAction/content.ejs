@@ -1,0 +1,102 @@
+<div class="form" style="padding: 20px 15px; border: solid 1px #e6e6e6; border-radius: 5px; margin: 10px 0px;">
+    <div class="form-row">
+    <% if(locals.chainAction !== undefined) { 
+        var actionsOfChain =chainAction.actions
+    %>
+        <div class="col-md-4 col-sm-12">
+            <label for="inputEmail4">Tên Chuỗi Hành Động</label>
+            <input value="<%= chainAction._id %>" type="text" class="form-control" id="chainActionId" name= "chainActionId" hidden>
+            <input value="<%= chainAction.name %>" type="text" class="form-control" id="chainActionName" name= "chainActionName" placeholder="Tên chuỗi hành động">
+        </div>
+        <div class="col-md-8 col-sm-12">
+            <label for="inputPassword4">Mô tả chuỗi hành động</label>
+            <textarea rows="1" class="form-control" id="chainActionDescription" name= "chainActionDescription" placeholder="Mô tả chuỗi hành động" style="resize: none; width: 100%"><%= chainAction.description %></textarea>
+        </div>
+        <div class="col-md-12">
+            <button onclick="addAction()" class="btn btn-outline-primary mt-3"><i class="fas fa-layer-plus" style="color: #05b0c2"></i> Thêm Hành Động</button>            
+            <div id="actions" style="margin-top: 20px">
+                <% for(var i=0; i < actionsOfChain.length; i++) { %>
+                <div id="index<%= i %>" class="form-row">
+                    <div class="form-group col-md-1 col-sm-2" style="padding-top: 33px;padding-left: 33px;">
+                        <span><%= i +1 %></span>
+                    </div>
+                    <div class="form-group col-md-5 col-sm-10">
+                        <label for="inputEmail4">Tên Hành Động</label>
+                        <select class="form-control" id="action<%= i %>" name= "action"> 
+                            <option value="">Không chọn</option>
+                            <option value="<%= actionsOfChain[i].action %>">Không chọn</option>
+                            <% actions.forEach(function(item){ %>
+                            <% if(actionsOfChain[i].action == item.id) { %>
+                             <option selected value = "<%= actionsOfChain[i].action %>"><%= item.name %></option>
+                             <% } else { %>
+                            <option value="<%= item.id %>"><%= item.name %></option>
+                            <% }%>
+                            <% }); %> 
+                        </select>            
+                    </div>
+                    <div class="form-group col-md-2 col-sm-4">
+                        <label for="inputEmail4">Page Hành Động</label>
+                        <select class="form-control" id="pageName<%= i %>" name= "pageSelect" > 
+                        <% if(locals.chainAction != undefined) {
+                            let pageForActions = [] 
+                            for(var j=0; j< chainAction.actions.length; j++) { 
+                                let temp = {
+                                    name: `${j + 1}`,
+                                    value: chainAction.actions[j].pageForAction
+                                };
+                                isExited = false;
+                                pageForActions.forEach(item => {
+                                    if(item.value == temp.value) isExited = true;
+                                })
+                                if(isExited == false) pageForActions.push(temp)
+                            } %>
+                            
+                            <% for(var j=0; j< pageForActions.length; j++) { %>
+                            <% if(pageForActions[j].value == actionsOfChain[i].pageForAction) { %>
+                                <option selected value="<%= actionsOfChain[i].pageForAction %>"><%= pageForActions[j].name %></option>
+                            <% } else { %>
+                                <option value="<%= pageForActions[j].value %>"><%= pageForActions[j].name %></option>
+                            <% } %>
+                            <% } %>
+                            
+                        <% } %>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-2 col-sm-4" style="margin-top: 33px;">
+                        <button onclick="newPage(this)" name="newPage" class="btn btn-outline-secondary" type="" id="<%= i %>" style=" width: 100%"><i class="fas fa-browser"></i> Tạo Page mới</button>
+                    </div>
+                    <div class="form-group col-md-2 col-sm-4" style="margin-top: 33px;">
+                        <button onclick="removeAction(<%= i %>)" name="removeAction" class="btn btn-outline-danger" type="" id="delete<%= i %>" style=" width: 100%"><i class="fas fa-trash-alt"></i> Xóa</button>
+                    </div>
+                </div>
+                <% } %>
+            </div>
+        </div>
+        
+    <% } else { %>
+        <div class="col-md-4 col-sm-12">
+            <label for="inputEmail4">Tên Chuỗi Hành Động</label>
+            <input type="text" class="form-control" id="chainActionName" name= "chainActionName" placeholder="Tên chuỗi hành động">
+        </div>
+        <div class="col-md-8 col-sm-12">
+            <label for="inputPassword4">Mô tả chuỗi hành động</label>
+            <textarea rows="1" class="form-control" id="chainActionDescription" name= "chainActionDescription" placeholder="Mô tả chuỗi hành động" style="resize: none; width: 100%"></textarea>
+        </div>
+        <div class="col-md-12">
+            <button onclick="addAction()" class="btn btn-outline-primary mt-3"><i class="fas fa-layer-plus" style="color: #05b0c2"></i> Thêm Hành Động</button>            
+            <div id="actions" style="margin-top: 20px">
+                
+            </div>
+        </div>
+    <% } %>
+                     
+    </div>
+</div>
+<script>
+    var actionList = [
+        <% actions.forEach(function(item) {%>
+        {id: '<%= item.id%>', name: '<%= item.name%>'},
+        <% }) %>
+    ]
+    
+</script>

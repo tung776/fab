@@ -1,0 +1,68 @@
+
+<% include ../layout/header%>
+     <section id="portfolio" style="margin-top: 50px">
+        <div class="container">
+            <h1 class="bd-title mb-5" id="content">Status</h1>
+            
+                <div class="form-row">
+                    <div class="form-group col-sm-12">
+                        <label for="inputEmail4">Nội Dung</label>
+                        <textarea id="newStatus" rows="6" style="width: 100%;"></textarea>
+                    </div>
+                    
+                </div>
+                <button type="submit" class="btn btn-primary" onClick = "addStatus()">Thêm Status</button>
+            
+            <ul class="list-group mt-5">
+                <div class="overflow-auto">
+                <% if(statuses != null) { %>
+                <% statuses.forEach(function(item) { %>
+                    <li class="list-group-item justify-content-end">
+                            <input type="hidden" name="id" id='id' value = "<%= item._id %>">
+                            <span class = "mr-4"><%= item.status %></span>
+                            
+                            <button type="button" class="btn btn-outline-danger" onClick = "del('<%= item._id %>')">Xóa</button>
+  
+                    </li>
+                <% }); %>
+                <% }; %>
+                </div>
+            </ul>
+        </div>
+    </section>
+    <% include ../layout/footer%>
+    <script>
+        var del = function(id) {
+            id = id.trim()          
+            const url = `/status/${id}`;
+            axios.delete(url)
+                .then(function (response) {
+                    location.reload()
+                })
+                .catch(function (error) {
+                    //location.reload()
+                    console.log(error);
+                });
+                // location.reload();
+        };
+        var addStatus = function() {            
+            var url = `/status/new`;
+            
+            axios.post(url, {
+                
+            })
+                .then(function (response) {
+                    location.reload()
+                })
+                .catch(function (error) {
+                    location.reload()
+                    console.log(error);
+                });
+                // location.reload();
+        };
+        
+
+        
+    </script>
+  </body>
+</html>

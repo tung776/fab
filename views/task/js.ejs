@@ -1,0 +1,22 @@
+<div id="template" hidden>
+    <div id="index{{index}}" class="form-row">
+        <div class="form-group col-md-1 col-sm-2" style="padding-top: 33px;padding-left: 33px;">
+            <span>{{stt}}</span>
+        </div>
+        <div class="form-group col-md-5 col-sm-10">
+            <p>thanhtung776</p>                      
+        </div>        
+        <div class="form-group col-md-2 col-sm-4" style="margin-top: 33px;">
+            <button onclick="removeAction({{index}})" name="removeAction" class="btn btn-outline-danger" type="" id="delete{{index}}" style=" width: 100%">Xóa</button>
+        </div>
+    </div>
+</div>
+<% include ./selectAccount%>
+<script>
+    var accountList = [];
+    var selectAccount = function() {
+        $('#selectAccount').modal('toggle')
+            
+    }
+    
+</script>

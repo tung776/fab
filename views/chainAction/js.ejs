@@ -1,0 +1,163 @@
+<div id="template" hidden>
+    <div id="index{{index}}" class="form-row">
+        <div class="form-group col-md-1 col-sm-2" style="padding-top: 33px;padding-left: 33px;">
+            <span>{{stt}}</span>
+        </div>
+        <div class="form-group col-md-5 col-sm-10">
+            <label for="inputEmail4">Tên Hành Động</label>
+            <select class="form-control" id="action{{index}}" name= "action" > 
+                <option value="">Không chọn</option>
+                <% actions.forEach( function(item){ %>
+                <option value="<%= item.id %>"><%= item.name %></option>
+                <% }); %> 
+            </select>            
+        </div>
+        <div class="form-group col-md-2 col-sm-4">
+            <label for="inputEmail4">Page Hành Động</label>
+            <select class="form-control" id="pageName{{index}}" name= "pageSelect" > 
+            </select>
+        </div>
+        <div class="form-group col-md-2 col-sm-4" style="margin-top: 33px;">
+            <button onclick="newPage(this)" name="newPage" class="btn btn-outline-secondary" type="" id="{{index}}" style=" width: 100%"><i class="fas fa-browser"></i> Tạo Page mới</button>
+        </div>
+        <div class="form-group col-md-2 col-sm-4" style="margin-top: 33px;">
+            <button onclick="removeAction({{index}})" name="removeAction" class="btn btn-outline-danger" type="" id="delete{{index}}" style=" width: 100%">Xóa</button>
+        </div>
+    </div>
+</div>
+<script>
+    var index = 0;
+    var pages = [];
+    <% if(locals.chainAction != undefined) {
+        let pageForActions = [] 
+         for(var i=0; i< chainAction.actions.length; i++) { 
+             let temp = {
+                 name: `${i + 1}`,
+                 value: chainAction.actions[i].pageForAction
+             };
+             isExited = false;
+             pageForActions.forEach(item => {
+                 if(item.value == temp.value) isExited = true;
+             })
+             if(isExited == false) pageForActions.push(temp)
+         } %>
+         pages = [
+         <% for(var i=0; i< pageForActions.length; i++) { %>
+            { name: `<%= pageForActions[i].name %>`, value: '<%= pageForActions[i].value%>' },
+         <% } %>
+         ];
+         index = <%= chainAction.actions.length %>;
+    <% } %>
+
+    var removeAction = function(indexRemove) {
+        //indexRemove = indexRemove + 1;
+        $(`#index${indexRemove}`).fadeOut("3000", function() {
+            $(this).remove();
+            renameAttAllAcction(indexRemove + 1, indexRemove, false, indexRemove );
+            index --;
+        });
+        
+    }
+    var renameAttAllAcction = function(indexFrom, indexTo, isInsert, indexStop) {
+            
+        var hasElement = true;
+        if($(`#index${indexFrom}`).length == 0) {
+                return;
+        }
+        $(`#index${indexFrom} span`).replaceWith(`<span>${indexTo + 1}</span>`)
+        $(`#index${indexFrom}`).attr("id",`index${indexTo}`);
+        $(`#action${indexFrom}`).attr("id",`action${indexTo}`);
+        //$(`#action${indexFrom}`).attr("name",`action${indexTo}`);
+        $(`#pageName${indexFrom}`).attr("id",`pageName${indexTo}`);
+        //$(`#pageName${indexFrom}`).attr("name",`pageName${indexTo}`);
+        $(`#${indexFrom}`).attr("id",`${indexTo}`);
+        $(`#delete${indexFrom}`).attr("onclick",`removeAction(${indexTo})`);
+        $(`#delete${indexFrom}`).attr("id",`delete${indexTo}`);
+
+        if(isInsert) {
+            if(indexStop > indexFrom - 1) return
+            renameAttAllAcction(indexFrom - 1, indexTo - 1, true, indexStop);
+        } else {
+            renameAttAllAcction(indexFrom + 1, indexTo + 1, false, indexStop);
+        }        
+    }
+    var newPage = function(e) {
+        var orderNum = e.id;
+        var actionId = $(`#action${orderNum}`)[0].value;
+        if(actionId == null || actionId == "") {
+            return
+        }
+        var page = {
+            name: Number(orderNum) + 1,
+            value: actionId
+        }
+        pages.push(page);
+        renderPageSelectOption();
+        
+        
+    }
+    var renderPageSelectOption = function() {
+        var optionString = '';
+        pages.forEach(function(page) {
+            var str = `<option value="${page.value}">${page.name}</option>`;
+            optionString = optionString + str
+        });
+        var pageSelects = $('select[name="pageSelect"]');
+        for(var i = 0; i < pageSelects.length; i ++) {
+            var oldValue = $(pageSelects[i])[0].selectedIndex;
+            $(pageSelects[i]).empty();
+            $(pageSelects[i]).append(optionString);
+            $(pageSelects[i])[0].selectedIndex = oldValue;
+        }
+    }
+    var addAction = function() {
+        var htmlString = $("#template").html();        
+        htmlString = htmlString.replace(/{{index}}/g, `${index}`);
+        htmlString = htmlString.replace(/{{stt}}/g, `${index + 1}`);
+        $("#actions").append(htmlString); 
+        renderPageSelectOption();       
+        index ++;
+    }
+
+    var updateChainAction = function() {
+        var url = `/chainAction/update`;
+        saveChainAction(url, true);
+    }
+
+    var addChainAction = function() {            
+        var url = `/chainAction/new`;
+        saveChainAction(url, false);
+    };
+
+    var saveChainAction = function(url, isUpdate) {
+        var name = $('#chainActionName')[0].value
+        var description = $('#chainActionDescription')[0].value
+        var listActions = [];
+        var elementActions = $('#actions > div');
+        for(var i = 0; i < elementActions.length; i++) {
+            var actionName = $(`#action${i}`)[0].value;
+            var pageName = $(`#pageName${i}`)[0].value;
+            listActions.push({
+                action: actionName,
+                pageForAction: pageName
+            });
+        }
+        var chainActionData = {
+            name: name,
+            description: description,
+            actions: listActions
+        }
+        if(isUpdate) chainActionData.id = $('#chainActionId')[0].value;
+        axios.post(url, chainActionData)
+            .then(function (response) {
+                location.reload()
+            })
+            .catch(function (error) {
+                location.reload()
+                console.log(error);
+            });
+            // location.reload();
+    }
+
+    
+</script>

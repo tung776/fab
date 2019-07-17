@@ -1,0 +1,284 @@
+
+<% include ../layout/header%>
+     <section id="portfolio" class="mt-5">
+        <div class="container">
+            <h1 class="bd-title mb-5" id="content">Cập nhật Tài Khoản</h1>            
+                <div class="form-row">
+                    <div class="form-group col-md-3 col-sm-6">
+                        <label for="inputEmail4">Tài Khoản</label>
+                        <input type="text" class="form-control" id="username" name= "username" placeholder="Tên tài khoản">
+                    </div>
+                    <div class="form-group col-md-3 col-sm-6">
+                        <label for="inputPassword4">email</label>
+                        <input type="text" class="form-control" id="email" name= "email" placeholder="email">
+                    </div>
+                    <div class="form-group col-md-3 col-sm-6">
+                        <label for="inputPassword4">Tên</label>
+                        <input type="text" class="form-control" id="name" name= "name" placeholder="Tên">
+                    </div>
+                    <div class="form-group col-md-3 col-sm-6">
+                        <label for="inputPassword4">Họ</label>
+                        <input type="text" class="form-control" id="lastName" name= "lastName" placeholder="Họ">
+                    </div>                    
+                    <div class="form-group col-md-3 col-sm-6">
+                        <label for="inputPassword4">Mật khẩu Email</label>
+                        <input type="text" class="form-control" id="pass-email" name= "pass-email" placeholder="mật khẩu email">
+                    </div>
+                    <div class="form-group col-md-3 col-sm-6">
+                        <label for="inputPassword4">Mật khẩu facebook</label>
+                        <input type="text" class="form-control" id="pass-facebook" name= "pass-facebook" placeholder="mật khẩu facebook">
+                    </div>
+                    <div class="form-group col-md-3 col-sm-6">
+                        <label for="inputPassword4">Mật khẩu alibaba</label>
+                        <input type="text" class="form-control" id="pass-alibaba" name= "pass-alibaba" placeholder="mật khẩu alibaba">
+                    </div>
+                    <div class="form-group col-md-3 col-sm-6">
+                        <label for="inputPassword4">Mật khẩu 1688</label>
+                        <input type="text" class="form-control" id="pass-1688" name= "pass-1688" placeholder="mật khẩu 1688">
+                    </div>
+                    <div class="form-group col-md-3 col-sm-3">
+                        <label for="inputPassword4">Ngày Sinh</label>
+                        <input type="text" class="form-control" id="dateOfBirth" name= "dateOfBirth" placeholder="Ngày Sinh">
+                    </div>
+                    <div class="form-group col-md-3 col-sm-3">
+                        <label for="inputPassword4">Tháng Sinh</label>
+                        <input type="text" class="form-control" id="monthOfBirth" name= "monthOfBirth" placeholder="Tháng Sinh">
+                    </div>
+                    <div class="form-group col-md-3 col-sm-3">
+                        <label for="inputPassword4">Năm Sinh</label>
+                        <input type="text" class="form-control" id="yearOfBirth" name= "yearOfBirth" placeholder="Năm Sinh">
+                    </div>
+                    <div class="form-group col-md-3 col-sm-3">
+                        <label for="inputPassword4">Giới Tính</label>
+                        <select class="form-control" id="gender" name= "gender"> 
+                            <option selected value = "2">Nữ</option>
+                            <option value = "1">Nam</option>
+                        </select>                        
+                    </div>
+                    <div class="form-group col-md-6 col-sm-12">                        
+                        <label for="exampleFormControlSelect2">proxies</label>
+                        <select size="8" style="height: 80%;" multiple class="form-control" id="proxies" name= "proxies">
+                            <% proxies.forEach( function(item){ %>
+                            <option value="<%= item._id %>"><%= `${item.ip}:${item.port}` %></option>
+                            <% }); %> 
+                        </select>                                               
+                    </div>
+                    <div class="form-group col-md-6 col-sm-12">
+                        <label for="inputPassword4">facebook</label>
+                        <textarea rows="6" cols="50" class="form-control" id="facebook" name= "facebook" placeholder="Địa chỉ facebook" style="resize: none;"></textarea>
+                    </div>
+                    <div class="form-group col-md-12 col-sm-12">
+                        <label for="inputPassword4">cookie</label>
+                        <textarea rows="4" cols="50" class="form-control" id="cookie" name= "cookie" placeholder="cookie"></textarea>
+                    </div>                     
+                    <div class="form-group col-md-12 col-sm-12">
+                        <label for="inputPassword4">userAgents</label>                        
+                        <select size="10" style="height: 80%;" multiple class="form-control" id="userAgents" name= "userAgents">
+                            <% userAgents.forEach( function(item){ %>
+                            <option value="<%= item._id %>"><%= item.agent %></option>
+                            <% }); %> 
+                        </select>
+                    </div>
+                    <div class="form-group col-md-12 col-sm-12">
+                        <label for="inputPassword4">Tình Trạng</label>                        
+                        <select class="form-control" id="status" name= "status">
+                            <% status.forEach( function(item){ %>
+                            <option value="<%= item %>"><%= item %></option>
+                            <% }); %> 
+                        </select>
+                    </div>
+                    
+                </div>
+                <button type="button" class="btn btn-primary" onClick = "addAccount()">Thêm Tài Khoản</button>
+                <button type="button" class="btn btn-success" onClick = "autoAddAccount()">Tự Động Thêm Tài Khoản</button>
+                <button type="button" class="btn btn-success" onClick = "checkAllIP()">Kiểm tra Proxy</button>
+            
+            <ul class="list-group mt-5">
+                <div class="overflow-auto">
+                <% if(accounts != null) { %>
+                <% accounts.forEach(function(item) { %>
+                    <li class="list-group-item justify-content-end">
+                        <div class="form-row">
+                            <img src="<%= `/accounts/pictures/${item.profile}`%>" style="width: 5%;height: 5%;">
+                        </div>
+                        <input type="hidden" name="id" id='id' value = "<%= item._id %>">
+                        <span class = "mr-4 <%= item._id %>"><%= item.username %></span>
+                        <span class = "mr-4 <%= item._id %>"><%= item.email %></span>
+                        <span class = "mr-4 <%= item._id %>"><%= item.lastName %></span>
+                        <span class = "mr-4 <%= item._id %>"><%= item.name %></span>
+                        <a class="btn btn-outline-success"  href="<%= `/account/${item._id}` %>">Chi Tiết</a>
+                        <button name="<%= item._id %>" class="btn btn-outline-success" onclick="checkIp('<%= item._id %>')">Kiểm tra IP</button>
+                        <button name="<%= item._id %>" class="btn btn-outline-success" onclick="manual('<%= item._id %>')">Thủ công</button>
+                        <button type="button" class="btn btn-outline-danger" onClick = "del('<%= item._id %>')">Xóa</button>
+                        
+                        <% if(item.status) { %>                        
+                            <% if(item.status.toString().trim() == "active") { %>
+                                <button type="button" class="btn btn-primary">Hoạt động</button>
+                            <% } %>
+                            <% if(item.status.toString().trim() == "checkpoint") { %>
+                                <button type="button" class="btn btn-warning">Checkpoit</button>
+                            <% } %>
+                            <% if(item.status.toString().trim() == "inactive") { %>
+                                <button type="button" class="btn btn-danger">Vô Hiệu</button>
+                            <% } %> 
+                            <% if(item.status.toString().trim() == "inactive") { %>
+                                <!--<button type="button" class="btn btn-success" onclick='loginmail("<%= item._id %>")'>login mail</button>-->
+                            <% } %> 
+                        <% } %>     
+                        <hr/>
+                        <div class="form-row mt-3">
+                            <% actions.forEach(action => { %>
+                            <button type="button" class="btn btn-outline-primary" onclick = "action('<%= item._id %>', '<%= action.id %>')"><%= action.name %></button>
+                            <% }) %>
+                        </div>
+                    </li>
+                <% }); %>
+                <% }; %>
+                </div>
+            </ul>
+        </div>
+    </section>
+    <% include ../layout/footer%>
+    <script>
+        var action = function(acountId, actionId) {
+            axios.post(`/action/doAction`, {
+                acountId: acountId, 
+                actionId: actionId
+            })
+                .then(function(res) {
+                    window.location.href = "monitor/action"
+                })
+                .catch(function(err) {
+                    console.log("đã có lỗi")
+                })
+        }
+        var view = function(id) {
+            id = id.trim()          
+            const url = `/account/${id}`;
+            axios.get(url)
+                .then(function (response) {
+                    location.reload()
+                })
+                .catch(function (error) {
+                    // location.reload()
+                    console.log(error);
+                });
+                // location.reload();
+        };
+        var addAccount = function() {            
+            var url = `/account`;
+            var username = $("#username").val();
+            var email = $("#email").val();
+            var name = $("#name").val();
+            var lastName = $("#lastName").val();
+            var passEmail = $("#pass-email").val();
+            var passFacebook = $("#pass-facebook").val();
+            var passAlibaba = $("#pass-alibaba").val();
+            var pass1688 = $("#pass-1688").val();
+            var dateOfBirth = $("#dateOfBirth").val();
+            var monthOfBirth = $("#monthOfBirth").val();
+            var yearOfBirth = $("#yearOfBirth").val();
+            var gender = $("#gender").children("option:selected")[0].value;
+            var status = $("#status").children("option:selected")[0].value;
+            var facebook = $("#facebook").val();
+            var cookie = $("#cookie").val();
+            if(cookie == "") {
+                cookie = []
+            }
+            var userAgents =  $("#userAgents").children("option:selected");
+            var agentArr = [];
+            for(var i =0; i<userAgents.length; i++){ agentArr.push(userAgents[i].value.trim()) }
+            var proxies =  $("#proxies").children("option:selected");
+            var proxiesArr = []
+            for(var i =0; i<proxies.length; i++){ proxiesArr.push(proxies[i].value.trim()) }
+
+            axios.post(url, {
+                username: username,
+                email: email,
+                name: name,
+                lastName: lastName,
+                pass: {
+                    facebook: passFacebook,
+                    email: passEmail,
+                    alibaba: passAlibaba,
+                    "1688": pass1688,
+                },
+                dateOfBirth: dateOfBirth,
+                monthOfBirth: monthOfBirth,
+                yearOfBirth: yearOfBirth,
+                gender: gender,
+                facebook: facebook,
+                cookie: cookie,
+                userAgents: agentArr,
+                proxies: proxiesArr,
+                status: status
+            })
+                .then(function (response) {
+                    location.reload()
+                })
+                .catch(function (error) {
+                    // location.reload()
+                    console.log(error);
+                });
+                // location.reload();
+        };
+        var autoAddAccount = function() {
+            var url = `/account/auto`;
+            axios.get(url)
+                .then(function (response) {
+                    location.reload()
+                })
+                .catch(function (error) {
+                    // location.reload()
+                    console.log(error);
+                });
+        };
+        var del = function (_id) {
+            var url = `/account/${_id}`;
+            axios.delete(url)
+                .then(function (response) {
+                    location.reload()
+                })
+                .catch(function (error) {
+                    // location.reload()
+                    console.log(error);
+                });
+        };
+
+        var checkIp = function (_id) {
+            axios.get(`/account/checkProxy/${_id}`)
+                .then()
+                .catch()
+        }
+        var manual = function (_id) {
+            axios.get(`/account/manual/${_id}`)
+                .then()
+                .catch()
+        }
+        var checkAllIP = function (_id) {
+            axios.get(`/account/checkAllProxy`)
+                .then()
+                .catch()
+        }
+        var loginmail = function(id) {
+            axios.get(`/account/loginFirstEmail/${id}`)
+                .then()
+                .catch()
+        }
+
+        var socket = io();
+        socket.on('connect', function(){
+            socket.on('checkProxy', function(data){
+                if(data.status) {
+                    $(`button[name="${data.id}"] > i`).remove("i:first");
+                    $(`button[name="${data.id}"]`).prepend('<i class="fas fa-shield-check ml-2 mr-2"></i>')
+                } else {
+                    $(`button[name="${data.id}"] > i`).remove("i:first");
+                    $(`button[name="${data.id}"]`).prepend('<i class="fas fa-exclamation-square"></i>')
+                }
+            });
+        })
+        
+    </script>
+  </body>
+</html>

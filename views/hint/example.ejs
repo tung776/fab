@@ -1,0 +1,78 @@
+<!--<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script> -->
+<ul class="nav nav-tabs">
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#VD1">Truy xuất dữ liệu</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#VD2">VD2</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#VD3">VD3</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#VD4">VD4</a>
+    </li>
+</ul>
+<div class="tab-content">
+    <div id="VD1" class="container tab-pane active">
+        <pre class="prettyprint">
+        module.exports = async function () {
+            console.log("bag = ", bag);
+            var accountModel = bag.mongoose.model("Account");
+            var account = await accountModel.findById({
+                _id: bag.accountId
+            });
+            bag.result.account = account;
+            console.log("tìm account từ script: ", account);
+        }
+        </pre>
+    </div>
+    
+    <div id="VD2" class="container tab-pane fade">
+      
+      <pre class="prettyprint">
+      module.exports = function () {   
+        var arr = ["cong ty son cat tuong", "son PU cat tuong", "sơn kẽm cát tường"];  
+        var rand = arr[Math.floor(Math.random() * arr.length)];  
+        console.log('random ', rand); 
+        bag.result.text = rand;
+      }
+      </pre>
+    </div>
+    <div id="VD3" class="container tab-pane fade">
+      
+      <pre class="prettyprint">
+      
+        </pre>
+    </div>
+    <div id="VD4" class="container tab-pane fade">
+      <p>Sử dụng helper.saveOneData giúp lưu dữ liệu mà không được sử dụng bag.account.save()</p>
+      <p>Để hỗ trợ lưu dữ liệu trong process child</p>
+      <pre class="prettyprint">
+      await helper.saveOneData(
+      {
+            model: "Account",
+            querry: {
+            _id: account._id
+            }
+        },
+        account
+      );
+        </pre>
+    </div>
+</div>
+<!--
+    <ul>
+        <li>bag.countLoop</li>
+        <li>bag.result.text, => nơi lưu các dữ liệu để input</li>
+        <li>bag.result.selector => nơi lưu trữ dữ liệu của các selector, Các selector có nội dung dạng {{selector}} sẽ bị thay thế bằng result.selector</li>
+        <li>bag.page => quản lý tác vụ trang</li>
+        <li>bag.browser => quản lý tạc vụ trfình duyệt</li>
+        <li>bag.accountId => lưu trữ id tà khoản hiện hành</li>
+        <li>bag.account => lưu thông tin tài khoản hiện hành</li>
+        <li>bag.mongoose => quản lý tác vụ csdl</li>
+        <li>bag.helper => chứa các phương thức hỗ trợ</li>
+        <li>bag.human => chứa phương thức hỗ trợ giả lập đỗ trễ người thực</li>
+        <li>bag.cheerio => trình quản lý DOM</li>
+    </ul>
+-->

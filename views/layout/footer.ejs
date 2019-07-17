@@ -1,0 +1,40 @@
+<footer>
+<input id="token" type="text" name="token" value="" hidden>
+  <%# <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> %>
+  <script src="/js/jquery.min.js"></script>
+    <script src="/js/popper.min.js" ></script>
+    
+    <script src="/js/bootstrap.min.js"></script>
+    
+    <script src="/js/axios.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/jquery.cookie.js"></script>
+  
+</footer>
+<script>
+  var socket = io();
+  socket.on('connect', function(){
+    var token = $.cookie('faManager');
+    socket.emit('authenticate', {token: token});
+  })
+
+  $(function () {
+    $('[data-toggle="popover"]').popover()
+  })
+
+  var checkLogin = function() {
+    var isLogged = false
+    var email = localStorage.getItem("faManager.email")
+    if(email != undefined && email != "") {
+      isLogged = true;
+      $('#login').fadeOut(1000)
+      $('#logout').fadeIn(1000)
+    } else {
+      $('#logout').fadeOut(1000)
+      $('#login').fadeIn(1000)
+    }
+  }
+  checkLogin();
+  
+
+</script>

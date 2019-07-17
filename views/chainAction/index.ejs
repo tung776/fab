@@ -1,0 +1,40 @@
+
+<% include ../layout/header%>
+     <section id="portfolio" style="margin-top: 50px">
+        <div class="container" style="border: 1px solid #dfdfdf;border-radius: 5px;padding: 20px 15px;">
+            <h1 class="bd-title mb-5" id="content">Chuỗi Hành Động</h1>
+            <ul class="list-group mt-5">
+                <div class="overflow-auto">
+                <% if(chainActions != null) { %>
+                <% chainActions.forEach(function(item) { %>
+                    <li class="list-group-item justify-content-end mt-3">
+                        <h5><%= item.name %></h5>
+                        <p><%= item.description %></p>
+                        <a class="btn btn-outline-primary" href="/chainAction/<%= item.id %>"><i class="fas fa-pencil"></i> Chi Tiết</a>
+                        <button onclick="remove(<%= item.id %>)" class="btn btn-outline-danger ml-3" href="/update"><i class="fas fa-trash-alt" style="color: red"></i> Xóa</button>
+                    </li>
+                <% }); %>
+                <% }; %>
+                </div>
+            </ul>
+            <a class="btn btn-primary mt-3" href="/chainAction/new"><i class="fas fa-plus"></i> Thêm mới</a>
+        </div>
+    </section>
+    <% include ../layout/footer%>
+    <script>
+        var remove = function(id) {
+            id = id.trim()          
+            const url = `/chainAction/${id}`;
+            axios.delete(url)
+                .then(function (response) {
+                    location.reload()
+                })
+                .catch(function (error) {
+                    location.reload()
+                    console.log(error);
+                });
+                // location.reload();
+        }
+    </script>
+  </body>
+</html>

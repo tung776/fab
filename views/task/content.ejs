@@ -1,0 +1,74 @@
+<div class="form" style="padding: 20px 15px; border: solid 1px #e6e6e6; border-radius: 5px; margin: 10px 0px;">
+    <div class="form-row">
+ 
+        <div class="col-md-4 col-sm-12">
+            <label for="inputEmail4">Tên Nhiệm Vụ</label>
+            <% if(locals.task != undefined) { %>
+            <input type="text" class="form-control" id="taskId" name= "taskId" hidden value="<%= locals.task._id %>">
+            <input type="text" class="form-control" id="taskName" name= "taskName" placeholder="Tên Nhiệm Vụ" value="<%= locals.task.name %>">
+            <% } else { %>
+            <input type="text" class="form-control" id="taskName" name= "taskName" placeholder="Tên Nhiệm Vụ">
+            <% } %>
+            
+        </div>
+        <div class="col-md-8 col-sm-12">
+            <label for="inputPassword4">Chuỗi Hành Động</label>
+            <select class="form-control" id="chainAction" name= "chainAction"> 
+                <option value="">Không chọn</option>
+                <% locals.chainActions.forEach(function(item){ 
+                    var isSelected = false;
+                    %>
+                    <% if(locals.task != undefined) { %>
+                    <% if(locals.task.chainAction == item.id ) { 
+                        isSelected = true
+                    }} %>     
+                    <% if(isSelected) { %> 
+                    <option selected value = "<%= item._id %>"><%= item.name %></option>
+                    <% } else { %>
+                    <option value = "<%= item._id %>"><%= item.name %></option>
+                    <% } %>
+                <% }); %> 
+            </select>
+        </div>
+        <div class="col-md-12">
+            <button onclick="selectAccount()" class="btn btn-outline-primary mt-3"><i class="fas fa-layer-plus" style="color: #05b0c2"></i> Chọn Tài Khoản</button>            
+            <div id="accounts" style="margin-top: 20px">
+                
+            </div>
+            <% if(locals.task != undefined) { %>
+            <p><strong style="color: green" id="count"><%= locals.task.accounts.length %></strong> Tài khoản được gán nhiệm vụ</p>
+            <% } else { %>
+            <p><strong style="color: green" id="count">0</strong> Tài khoản được gán nhiệm vụ</p>
+            <% } %>
+        </div>
+                     
+    </div>
+</div>
+<script>
+    
+    
+</script>
+<style>
+    div.caption {
+        border: 1px solid #f8f8f8;
+        padding: 10px;
+        border-radius: 5px;
+        background-color: #dfdfdf;
+        margin-bottom: 8px;
+        margin-right: 0px;
+        margin-left: -15px;
+    }
+    div.caption.selected {
+        border: 1px solid #f8f8f8;
+        padding: 10px;
+        border-radius: 5px;
+        background-color: #0f9703;
+        margin-bottom: 8px;
+        margin-right: 0px;
+        margin-left: -15px;
+        color: white;
+    }
+    div.caption p {
+        font-size: 14px
+    }
+</style>

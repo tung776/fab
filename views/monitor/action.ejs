@@ -1,0 +1,190 @@
+
+<% include ../layout/header%>
+<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+     <section class ="text-center" style="width: 100%; margin-top:55px !important">
+        <div class="container">
+            <div role="main" class="inner cover">
+                <h1 class="cover-heading">Hành Động Đang Chạy</h1>
+                <div class="container" style="min-height: 250px">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div id="account" class="mt-3 mb-3">
+                                <h5>Profile</h5>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div id="message" class="mt-3 mb-3">
+                                <h5>Message</h5>                                
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div  class="mt-3 mb-3">                                
+                                <div id="screenShot" style="overflow-y: scroll; height:600px; border: 1px solid; visibility: hidden">
+                                    <h5>Ảnh Màn Hình</h5>
+                                </div>                                
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div  class="mt-3 mb-3">                                
+                                <div id="errorMessage" style="overflow-y: scroll; height:600px; color: white; border: 1px solid; visibility: hidden">
+                                    <h5>Lỗi</h5>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+
+            <footer class="mastfoot mt-auto">
+                <div class="inner">
+                    <p>Theo dõi các hoạt động thực hiện action</p>
+                </div>
+            </footer>
+        </div>
+        <!--
+        <div class="container">
+            <div id="message">
+            
+                <p><i class="fas fa-check-square mr-5" style="color: green"></i>Đang khởi chạy bước 2 0</p>
+            </div>
+        </div>
+        -->
+    </section>
+    <% include ../layout/footer%>
+    
+    <script>
+        var socket = io();
+        socket.on('connect', function(){
+            $("#message").append(`<p><i class="fas fa-check-square mr-5" style="color: green"></i>Đã kết nối</p>`)
+            socket.on('doAction', function(data){
+                $('#message').append(`<p><i class="fas fa-check-square mr-5" style="color: green"></i>${data.message}</p>`)
+                if($("#message > p").length > 10) {
+                    $("#message > p").remove("p:first");
+                }
+
+            });
+            socket.on('errorMessage', function(data){
+                $('#errorMessage').append(`
+                <div style="color: white">
+                    <p><i class="fas fa-exclamation-red" style="color:red"></i></i>${data.message}</p>
+                    <pre class="prettyprint" style="color: white">${data.stack}</pre>
+                </div>
+                `)
+
+                if($("#errorMessage > div").length > 0) {                    
+                    $("#errorMessage").css('visibility', 'visible');
+                } else {
+                    $("#errorMessage").css('visibility', 'hidden');
+                }
+
+            });
+            socket.on('account', function(data){
+                $('#account').append(`
+                <div class="">
+                    <img src="/accounts/pictures/${data.message.profile}" style="width: 150px;height: 180px; margin-top: 20px; margin-bottom: 25px">
+                    <p class="mr-4">${data.message.username}</p>
+                    <p class="mr-4">${data.message.email}</p>
+                </div>`)
+            });
+            socket.on('screenShot', function(data){
+                $('#screenShot').prepend(`
+                <div class="">
+                    <img src="/screenShot/${data.screenShot}" style="width: 90%; height: auto; margin-top: 20px; margin-bottom: 25px">
+                </div>`)
+                if($("#screenShot > div").length > 0) {                    
+                    $("#screenShot").css('visibility', 'visible');
+                } else {
+                    $("#screenShot").css('visibility', 'hidden');
+                }
+            });
+        });
+    </script>
+    <style>
+    
+
+    html,
+    body {
+    height: 100%;
+    background-color: #333;
+    }
+
+    body {
+    display: -ms-flexbox;
+    display: flex;
+    color: #fff;
+    text-shadow: 0 .05rem .1rem rgba(0, 0, 0, .5);
+    box-shadow: inset 0 0 5rem rgba(0, 0, 0, .5);
+    }
+
+    .cover-container {
+    max-width: 42em;
+    }
+
+
+    /*
+    * Header
+    */
+    .masthead {
+    margin-bottom: 2rem;
+    }
+
+    .masthead-brand {
+    margin-bottom: 0;
+    }
+
+    .nav-masthead .nav-link {
+    padding: .25rem 0;
+    font-weight: 700;
+    color: rgba(255, 255, 255, .5);
+    background-color: transparent;
+    border-bottom: .25rem solid transparent;
+    }
+
+    .nav-masthead .nav-link:hover,
+    .nav-masthead .nav-link:focus {
+    border-bottom-color: rgba(255, 255, 255, .25);
+    }
+
+    .nav-masthead .nav-link + .nav-link {
+    margin-left: 1rem;
+    }
+
+    .nav-masthead .active {
+    color: #fff;
+    border-bottom-color: #fff;
+    }
+
+    @media (min-width: 48em) {
+    .masthead-brand {
+        float: left;
+    }
+    .nav-masthead {
+        float: right;
+    }
+    }
+
+
+    /*
+    * Cover
+    */
+    .cover {
+    padding: 0 1.5rem;
+    }
+    .cover .btn-lg {
+    padding: .75rem 1.25rem;
+    font-weight: 700;
+    }
+
+
+    /*
+    * Footer
+    */
+    .mastfoot {
+    color: rgba(255, 255, 255, .5);
+    }
+
+    </style>
+  </body>
+</html>

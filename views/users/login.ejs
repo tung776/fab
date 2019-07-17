@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>FBook Manager</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    
+    <link
+      href="/css/main.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-offcanvas@1.0.0/offcanvas.css"
+      rel="stylesheet"
+    />
+  </head>
+
+<body>
+    <% include ../layout/header%>
+    <div class="container register">
+        <div class="row">
+            <div class="col-md-3 register-left">
+                <a class="navbar-brand" href="/" style="font-size: 3em; color: #092136;">Fb</i><i class="fas fa-grin-hearts" style="color: #ff42bd"></i><i class="fas fa-grin-beam" style="color: #fdf625;"></i><i class="fas fa-dragon" style="color:#092136"></i></a>
+                <h3>Welcome.</h3>
+                <a name="linkCreateUser" href="/api/users/create" class="btn"><i class="fas fa-user-plus"></i> Tạo người dùng</a><br/>
+            </div>
+            <div class="col-md-9 register-right">
+                
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                        <h3 class="register-heading">Đăng Nhập</h3>
+                        <div class="row register-form">
+                        <div class="col-md-6">
+                                <div class="form-group">
+                                    <input id="email" type="email" class="form-control" placeholder="Email *" value="" />
+                                </div>
+                                
+                                <div class="form-group">
+                                    <input id="password" type="password" class="form-control" placeholder="Mật khẩu *" value="" />
+                                </div>
+                                
+                            </div>
+                            <div class="col-md-6">
+                                
+                                
+                                <div class="form-group">
+                                    <button type="submit" class="btnRegister" onclick="login()"><i class="fas fa-sign-in"></i> Đăng Nhập</button>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+                    
+            </div>
+        </div>
+    </div>
+    <% include ../layout/footer%>
+</body>
+<script>
+    var login = function() {
+        var dataForm = {
+            user: {
+                password: $('#password')[0].value,
+                email: $('#email')[0].value,
+            }
+        }
+        axios.post('/api/users/login', dataForm)
+            .then(function (response) {
+                console.log(response)
+                if(response.status == 200) {
+                    var email = response.data.email //email, image, token, username
+                    localStorage.setItem("faManager.email", email)
+                    window.location.href = "/";
+                }
+            })
+            .catch(function (error) {
+                // location.reload()
+                console.log(error);
+            });
+    }
+</script>
+<style>
+body {
+    background-color: #0c2728;
+}
+.register{
+    background: -webkit-linear-gradient(left, #5F9EA0, #00c6ff);
+    margin-top: 18%;
+    padding: 3%;
+}
+.register-left{
+    text-align: center;
+    color: #fff;
+    margin-top: 4%;
+}
+.register-left input{
+    border: none;
+    border-radius: 1.5rem;
+    padding: 2%;
+    width: 60%;
+    background: #f8f9fa;
+    font-weight: bold;
+    color: #383d41;
+    margin-top: 30%;
+    margin-bottom: 3%;
+    cursor: pointer;
+}
+.register-left a[name="linkCreateUser"]{
+    border: none;
+    border-radius: 1.5rem;
+    padding: 2%;
+    background: #f8f9fa;
+    font-weight: bold;
+    color: #383d41;
+    margin-top: 20%;
+    margin-bottom: 8%;
+    cursor: pointer;
+}
+.register-right{
+    background: #f8f9fa;
+    border-top-left-radius: 10% 50%;
+    border-bottom-left-radius: 10% 50%;
+}
+.register-left img{
+    margin-top: 15%;
+    margin-bottom: 5%;
+    width: 25%;
+    -webkit-animation: mover 2s infinite  alternate;
+    animation: mover 1s infinite  alternate;
+}
+@-webkit-keyframes mover {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-20px); }
+}
+@keyframes mover {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-20px); }
+}
+.register-left p{
+    font-weight: lighter;
+    padding: 12%;
+    margin-top: -9%;
+}
+.register .register-form{
+    padding: 5%;
+    margin-top: 10%;
+}
+.btnRegister{
+    float: right;
+    margin-top: 10%;
+    border: none;
+    border-radius: 1.5rem;
+    padding: 2%;
+    background: #87CEFA	;
+    color: #fff;
+    font-weight: 600;
+    width: 50%;
+    cursor: pointer;
+}
+.register .nav-tabs{
+    margin-top: 3%;
+    border: none;
+    background: #87CEFA	;
+    border-radius: 1.5rem;
+    width: 28%;
+    float: right;
+}
+.register .nav-tabs .nav-link{
+    padding: 2%;
+    height: 34px;
+    font-weight: 600;
+    color: #fff;
+    border-top-right-radius: 1.5rem;
+    border-bottom-right-radius: 1.5rem;
+}
+.register .nav-tabs .nav-link:hover{
+    border: none;
+}
+.register .nav-tabs .nav-link.active{
+    width: 100px;
+    color: #000000;
+    border: 2px solid #87CEFA;
+    border-top-left-radius: 1.5rem;
+    border-bottom-left-radius: 1.5rem;
+}
+.register-heading{
+    text-align: center;
+    margin-top: 4%;
+    margin-bottom: -10%;
+    color: #495057;
+}
+</style>

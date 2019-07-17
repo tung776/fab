@@ -1,0 +1,100 @@
+<div id="chainActionMonitorTemplate" hidden >    
+    <div id = "chainActionMonitor-{{id}}" class="col-md-6" style="display: none;">
+        <a id="idAccount-{{id}}" name="btnChainAction" class="btn" data-toggle="collapse" href="#idAccount-{{id}}-Collapse" role="button" aria-expanded="false" aria-controls="idAccount-{{id}}-Collapse">
+            <i class="fas fa-id-card-alt"></i> {{username}} / {{chainActionName}}
+        </a>
+        <div class="collapse" id="idAccount-{{id}}-Collapse">
+            <div class="row text-left" name="chainActionMonitor">
+                <div name="accountProfile" class="col-md-12">
+                    <div class="row text-left" style="
+                        margin-top: 15px;
+                        margin-bottom: 15px;
+                    ">
+                        <div class="col-md-2">
+                            <img {{profile}} style="width: 100%;margin-top: 10px;margin-bottom: 10px;">
+                        </div>
+                        <div class="col-md-10 text-left">
+                            <p class="mr-2">{{email}}</p>
+                            <p class="mr-2">{{facebook}}</p>
+                        </div>
+                    </div>                    
+                </div>
+                <div name = "steps" class="col-md-12">
+                </div>
+                <div name = "errors">
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id = "stepsDoneTemplate" hidden>
+    <div id="stepId{{indexStep}}-{{accountId}}">
+        <p><i class="fas fa-check-square mr-3" style="color: green"></i> {{message}}</p>
+        <div name = "errors">
+        </div>
+    </div>
+</div>
+<div id = "errorsTemplate" hidden>
+    <div id="rowBugStepId{{indexStep}}-{{accountId}}" class="row">
+        <span style="color: red"><i class="fas fa-exclamation-red" style="color: red; margin-left: 15px; margin-right: 10px font-size: 14px"></i> {{errorMessage}}</span>
+        <a name="bug" id="bugStepId{{indexStep}}-{{accountId}}" class="btn" data-toggle="collapse" href="#bugStepId{{indexStep}}-{{accountId}}Collapse" role="button" aria-expanded="false" aria-controls="bugStepId{{indexStep}}-{{accountId}}Collapse"><i class="fas fa-bug"></i></a>
+        <div class="collapse" id="bugStepId{{indexStep}}-{{accountId}}Collapse">
+            <p style="color: white, font-size: 14px">
+        {{errorStack}}
+            </p>
+        </div>
+    </div>
+</div>
+<script>
+    var renderChainActionMonitorByAccount = function(account, chainAction) {
+        if($(`#chainActionMonitor-${account._id}`).length > 0 ) return;
+        var htmlString = $("#chainActionMonitorTemplate").html();
+        htmlString = htmlString.replace(/{{id}}/g, `${account._id}`);
+        htmlString = htmlString.replace(/{{username}}/g, `${account.username}`);
+        if(chainAction != undefined) {
+            htmlString = htmlString.replace(/{{chainActionName}}/g, `${chainAction.name}`);
+        }
+        htmlString = htmlString.replace(/{{profile}}/g, `src="/accounts/pictures/${account.profile}"`);
+        htmlString = htmlString.replace(/{{email}}/g, `${account.email}`);
+        htmlString = htmlString.replace(/{{facebook}}/g, `${account.facebook}`);
+        $("#chainActions").append(htmlString); 
+        $(`#chainActionMonitor-${account._id}`).fadeIn(1000);
+    }
+    var removeChainActionMonitor= function(accountId) {
+        $(`#chainActionMonitor-${accountId}`).fadeOut(1000, function() {
+            $(this).remove();
+        });
+    }
+    var renderStepDoneMonitorByAccount = function(account, message, step) {
+        if($(`#idAccount-${account._id}-Collapse`).length <= 0) {
+            renderChainActionMonitorByAccount(account)
+        }
+        var htmlString = $("#stepsDoneTemplate").html();
+        htmlString = htmlString.replace(/{{message}}/g, `${message}`);
+        htmlString = htmlString.replace(/{{accountId}}/g, `${account._id}`);
+        if(step != undefined) {
+            htmlString = htmlString.replace(/{{indexStep}}/g, `${step.indexStep}`);
+        } else {
+            var randomId = Math.floor((Math.random() * 100000))
+            htmlString = htmlString.replace(/{{indexStep}}/g, `${randomId}`);
+        }
+        $(`#idAccount-${account._id}-Collapse div[name="steps"]`).append(htmlString);
+    }
+    var renderErrorsMonitorByAccount = function(account, error, step) {
+        if(step != undefined) {
+            if($(`#rowBugStepId${step.indexStep}-${account._id}`).length > 0) return
+            if($(`#idAccount-${account._id}-${account._id}-Collapse`).length <= 0) {
+                renderChainActionMonitorByAccount(account)
+            }
+            var htmlString = $("#errorsTemplate").html();
+            htmlString = htmlString.replace(/{{errorMessage}}/g, `${error.message}`);
+            htmlString = htmlString.replace(/{{indexStep}}/g, `${step.indexStep}`);
+            htmlString = htmlString.replace(/{{accountId}}/g, `${account._id}`);
+            if(error.stack) {
+                htmlString = htmlString.replace(/{{errorStack}}/g, `${error.stack}`);
+            }
+            $(`#stepId${step.indexStep}-${account._id} div[name="errors"]`).append(htmlString);
+        }
+    }
+</script>

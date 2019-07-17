@@ -1,0 +1,37 @@
+
+<% include ../layout/header%>
+     <section id="portfolio">
+        <div class="container">
+            <h1 class="bd-title mb-5" id="content">Các Hành động</h1>
+            
+            <div class="form-row">
+                <div class="form-group col-md-3 col-sm-6">
+                    <b>Tên hành động</b>
+                </div>
+                <div class="form-group col-md-9 col-sm-6">
+                    <b >Mô tả hành động</b>
+                </div>
+                <% for(var i = 0; i < actions.length; i++) {%>
+                    <div class="form-group col-md-3 col-sm-6">
+                        <span id="id" hidden><%= actions[i].id%></span>
+                        <p><%= actions[i].name%></p>
+                    </div>
+                    <div class="form-group col-md-6 col-sm-6">
+                        <p><%= actions[i].description%></p>
+                    </div>
+                    <div class="form-group col-md-3 col-sm-6">
+                        <a class="btn btn-outline-success mt-3" href="/action/detail/<%= actions[i].id %>" ><i class="fas fa-eye"></i> Chi Tiết</a>
+                    </div>
+                <% } %>
+                <div class="form-group col-md-3 col-sm-6">
+                  <a class="btn btn-outline-primary mt-3" href="/action/new" ><i class="fas fa-code-branch"></i> Thêm Hành Động</a>
+                </div>
+            </div>
+                
+        </div>
+    </section>
+    <% include ../layout/footer%>
+    <script>
+    </script>
+  </body>
+</html>

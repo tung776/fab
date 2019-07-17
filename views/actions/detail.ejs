@@ -1,0 +1,840 @@
+
+<% include ../layout/header%>
+
+     <section id="portfolio">
+        <div class="container">
+            <h1 class="bd-title mb-5">Chi Tiết Hành Động</h1>            
+            <div class="form-row">
+                <div class="form-group col-md-4 col-sm-12">
+                    <label for="inputEmail4">Tên Hành Động</label>
+                    <input type="text" class="form-control" id="actionName" name= "actionName" placeholder="Tên Hoạt động" value="<%= action.name%>">
+                    <input id="id" hidden value="<%= action.id%>">
+                </div>
+                <div class="form-group col-md-8 col-sm-12">
+                    <label for="inputPassword4">Mô tả hành động</label>
+                    <textarea rows="3" class="form-control" id="actionDescription" name= "actionDescription" placeholder="Mô tả hành động" style="resize: none;"><%= action.description%></textarea>
+                </div>                   
+            </div>
+            <div  class="form-row">                
+                <div id="step" style="width: 100%;">
+                <h3 class="bd-title mb-2">Các bước</h3>
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <td scope="row">                                    
+                                    <div class="form-group">
+                                        <label for="inputEmail4">Số thứ tự</label>
+                                        <input value="1" type="text" class="form-control" id="index" name= "index" style="min-width:100px;">
+                                    </div>                                    
+                                    <div class="form-group">
+                                        <label for="inputEmail4">Bước kế tiếp</label>
+                                        <input value="2" type="text" class="form-control" id="next" name= "next" style="min-width:100px;">
+                                    </div>  
+                                    <div class="form-group">
+                                        <label for="inputEmail4">Điều kiện</label>
+                                        <select onchange='onSelectChange(this)' class="form-control" id="conditionEnum" name= "conditionEnum" > 
+                                            <option value="">Không chọn</option>
+                                            <% conditionEnum.forEach( function(item){ %>
+                                            <option value="<%= item.name %>"><%= item.name %></option>
+                                            <% }); %> 
+                                        </select>                                                                                          
+                                    </div>                                                                      
+                                </td>
+                                <td>
+                                    <div class="form-group">
+                                        <label for="inputEmail4">Nhập mô tả</label>
+                                        <input  type="text" class="form-control" id="description" name= "description" placeholder="Mô tả">
+                                    </div>                                
+                                    <div class="form-group">
+                                        <label for="inputEmail4">URL</label>
+                                        <input type="text" class="form-control" id="url" name= "url" placeholder="URL">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="inputEmail4">bước tiếp (điều kiện đúng) </label>
+                                        <input type="text" class="form-control" id="conditionTypeNext" name= "conditionTypeNext" style="min-width:100px;">
+                                    </div> 
+
+                                </td>
+                                <td>
+                                    <div class="form-group">
+                                        <label for="inputPassword4">Loại</label>
+                                        <select class="form-control" id="typeActions" name= "typeActions" style="width:100%"> 
+                                        <option value="">Không chọn</option>
+                                        <% typeActions.forEach((type, index) => { %>
+                                            <option value = "<%= type %>"><%= type %></option>
+                                        <% }) %>
+                                        </select>                        
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="inputPassword4">Thời gian chờ</label>
+                                        <select class="form-control" id="wait" name= "wait" style="width:100%"> 
+                                        <option value="">Không chọn</option>
+                                        <% waitEnum.forEach((wait, index) => { %>
+                                            <option value = "<%= wait %>"><%= wait %></option>
+                                        <% }) %>
+                                        </select>                        
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="inputEmail4">Số lần lặp lại </label>
+                                        <input type="text" class="form-control" id="conditionTypeCount" name= "conditionTypeCount" style="min-width:100px;">
+                                    </div> 
+                                </td>
+                                <td>
+                                    <div class="form-group">
+                                        <label for="inputEmail4">Selector</label>
+                                        <input type="text" class="form-control" id="Selector" name= "Selector" placeholder="selector">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="inputEmail4">document evaluation</label>
+                                        <input type="text" class="form-control" id="documentEval" name= "documentEval" placeholder="document evaluation">
+                                    </div>
+                                    <div class="form-group row">
+                                        <button type="button" class="btn btn-outline-primary" style="margin-top: 30px; width: 40%;" onclick = 'insertStep()' data-toggle="modal" data-target="#insertStep"><i class="fas fa-indent"></i> Chèn</button>
+                                        <button type="button" class="btn btn-outline-secondary" style="margin-top: 30px; width: 60%;" onclick = 'addStep()' data-toggle="modal" data-target="#addStepModal"><i class="fas fa-network-wired"></i> Thêm bước</button>
+                                    </div>
+                                    
+                                </td>
+                                <td>
+                                    <div class="form-group">
+                                        <label for="inputEmail4">Dữ Liệu Nguồn</label>
+                                        <select onchange='onSelectChange(this)' class="form-control" id="selectObjects" name= "selectObjects" > 
+                                            <option value="">Không chọn</option>
+                                            <% objects.forEach( function(item){ %>
+                                            <option value="<%= item.object %>"><%= item.object %></option>
+                                            <% }); %> 
+                                        </select>                                                                                          
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="inputEmail4">Trường dữ liệu</label>
+                                        <select class="form-control" id="properties" name= "properties">
+                                            
+                                        </select> 
+                                    </div>
+                                    <div class="form-group">
+                                        <button type="button" class="btn btn-outline-success" onclick = 'saveAction()' data-toggle="modal" data-target="#saveActionModal" style="margin-top: 30px; width: 100%;"><i class="fas fa-save"></i> Lưu Action</button>
+                                    </div>
+                                    
+                                </td>
+                                
+                            </tr>
+                            
+                        </tbody>
+                    </table>
+                    <div id="errors"></div>
+                    <div class="row">
+                        <div class="col-md-6 col-sm-12">
+                            <div id="hint">
+                                <div class="card-header" id="hint">
+                                    <h5 class="mb-0">
+                                        <button class="btn btn-link" data-toggle="collapse" data-target="#collapseHint" aria-expanded="true" aria-controls="collapseHint">
+                                        <i class="fas fa-question-circle"></i>
+                                        Ví Dụ
+                                        </button>
+                                    </h5>
+                                </div>
+                                <div id="collapseHint" class="collapse" aria-labelledby="Hint" data-parent="#accordion" style="">
+                                <div class="card-body">                                
+                                    <div class="row">                                    
+                                        <% include ../hint/example%>
+                                    </div>
+                                    <div class="form-group">
+                                        <button type="button" class="btn btn-success mt-3" onclick = 'saveAction()' data-toggle="modal" data-target="#saveActionModal">Code mẫu</button>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-12">
+                            <div id="bag">
+                                <div class="card-header" id="bag">
+                                    <h5 class="mb-0">
+                                        <button class="btn btn-link" data-toggle="collapse" data-target="#collapsebag" aria-expanded="true" aria-controls="collapsebag">
+                                        <i class="fas fa-question-circle"></i>
+                                        BAG
+                                        </button>
+                                    </h5>
+                                </div>
+                                <div id="collapsebag" class="collapse" aria-labelledby="bag" data-parent="#accordion" style="">
+                                    <div class="card-body">                                
+                                        <div class="row">
+                                                                                
+                                            <% include ../hint/bag%>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div  class="container" style="padding: 0">
+                        <label for="inputEmail4">Phương thức tùy biến</label>
+                        <textarea id="code" class="codemirror-textarea" rows="20" cols="100"></textarea>
+                        <button class="btn btn-primary" id="checkcode" style="margin-top: 15px;" ><i class="fas fa-shield-check"></i> Kiểm tra</button>
+                    </div>
+                    <div id="errorCode" style="margin-left: 15px"></div>                    
+                </div>
+                
+            </div>   
+              
+        </div>
+    </section>
+    <div class="container">
+        <div id="steps"> 
+            <div id="accordion">
+                <% for(var i =0; i <action.steps.length; i++) { 
+                    var item = action.steps[i]
+                    %>
+                <div class="card-header" id="headingStep<%= item.indexStep %>">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link" data-toggle="collapse" data-target="#collapseStep<%= item.indexStep %>" aria-expanded="true" aria-controls="collapseStep<%= item.indexStep %>">
+                        <i class="fas fa-walking"></i>
+                        Step<%= item.indexStep %>
+                        </button>
+                        <button id="removeStep<%= item.indexStep %>" class="btn btn-link" onclick="removeStep(<%= item.indexStep %>)" >
+                        <i class="fas fa-minus-octagon" style="color:red"></i>
+                        </button>
+                    </h5>
+                </div>
+                    <div id="collapseStep<%= item.indexStep %>" class="collapse" aria-labelledby="headingStep<%= item.indexStep %>" data-parent="#accordion">
+                        <div class="card-body">
+                            <table class="table">
+                                <tbody>
+                                    <tr>
+                                        <td scope="row">
+                                            <div class="form-group">
+                                                <label for="inputEmail4">Số thứ tự</label>
+                                                <input data-step="<%= item.indexStep %>" value="<%= item.indexStep %>" type="text" class="form-control" id="index<%= item.indexStep %>" name= "index<%= item.indexStep %>" style="min-width:100px;">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="inputEmail4">Bước kế tiếp</label>
+                                                <input data-step="<%= item.indexStep %>" value="<%= item.next %>" type="text" class="form-control" id="nextStep<%= item.indexStep %>" name="nextStep<%= item.indexStep %>" style="min-width:100px;">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="inputEmail4">Điều kiện</label>
+                                                <select onchange='onSelectChange(this)' class="form-control" id="conditionEnumStep<%= item.indexStep %>" name= "conditionEnumStep<%= item.indexStep %>" > 
+                                                    <option value="">Không chọn</option>
+                                                    <% conditionEnum.forEach( function(condition){ %>
+                                                    <% if(item.conditionType.name == condition.name) { %>
+                                                    <option selected value="<%= condition.name %>"><%= condition.name %></option>
+                                                    <% } else { %>
+                                                    <option value="<%= condition.name %>"><%= condition.name %></option>
+                                                    <% } %>
+                                                    <% }); %> 
+                                                </select>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <label for="inputEmail4">Nhập mô tả</label>
+                                                <input value="<%= item.description %>" data-step="<%= item.indexStep %>" type="text" class="form-control" id="descriptionStep<%= item.indexStep %>" name= "descriptionStep<%= item.indexStep %>" placeholder="Mô tả">
+                                            </div>                                
+                                            <div class="form-group">
+                                                <label for="inputEmail4">URL</label>
+                                                <input value="<%= item.url %>" data-step="<%= item.indexStep %>" type="text" class="form-control" id="urlStep<%= item.indexStep %>" name= "urlStep<%= item.indexStep %>" placeholder="URL">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="inputEmail4">bước tiếp (điều kiện đúng) </label>
+                                                <input value="<%= item.conditionType.next %>" type="text" class="form-control" id="conditionTypeNextStep<%= item.indexStep %>" name= "conditionTypeNextStep<%= item.indexStep %>" style="min-width:100px;">
+                                            </div>                                
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <label for="inputPassword4">Loại</label>
+                                                <select data-step="<%= item.indexStep %>" class="form-control" id="typeActionsStep<%= item.indexStep %>" name= "typeActionsStep<%= item.indexStep %>" style="width:100%"> 
+                                                <option value="">Không chọn</option>
+                                                <% typeActions.forEach((type, index) => { %>
+                                                    <% if(type == item.actionType) { %>
+                                                    <option selected value = "<%= type %>"><%= type %></option>
+                                                    <% } else { %>
+                                                    <option value = "<%= type %>"><%= type %></option>
+                                                    <% } %>
+                                                <% }) %>
+                                                </select>                        
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="inputPassword4">Thời gian chờ</label>
+                                                <select data-step="<%= item.indexStep %>" class="form-control" id="waitStep<%= item.indexStep %>" name= "waitStep<%= item.indexStep %>" style="width:100%"> 
+                                                <option value="">Không chọn</option>
+                                                <% waitEnum.forEach((wait, index) => { %>
+                                                    <% if(wait == item.wait) { %>
+                                                    <option selected value = "<%= wait %>"><%= wait %></option>
+                                                    <% } else { %>
+                                                    <option value = "<%= wait %>"><%= wait %></option>
+                                                    <% } %>
+                                                <% }) %>
+                                                </select>                        
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="inputEmail4">Số lần lặp lại </label>
+                                                <input value="<%= item.conditionType.count %>" type="text" class="form-control" id="conditionTypeCountStep<%= item.indexStep %>" name= "conditionTypeCountStep<%= item.indexStep %>" style="min-width:100px;">
+                                            </div> 
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <label for="inputEmail4">Selector</label>
+                                                <input value="<%= item.selector %>" data-step="<%= item.indexStep %>" type="text" class="form-control" id="SelectorStep<%= item.indexStep %>" name= "SelectorStep<%= item.indexStep %>" placeholder="selector">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="inputEmail4">document evaluation</label>
+                                                <input value="<%= item.documentEval %>" data-step="<%= item.indexStep %>" type="text" class="form-control" id="documentEvalStep<%= item.indexStep %>" name= "documentEvalStep<%= item.indexStep %>" placeholder="document evaluation">
+                                            </div>
+                                        </td>
+                                        <td>
+                                            
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="row">
+                                <label for="inputEmail4">Phương thức tùy biến</label>
+                                <textarea id="codeStep<%= item.indexStep %>" data-step="<%= item.indexStep %>" rows="6" style="width: 100%;"><%= item.customFunction %></textarea>
+                            </div> 
+                        </div>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+        
+        <button type="button" class="btn btn-warning mt-3" onClick = "removeAction()" data-toggle="modal" data-target="#removeActionModal"><i class="fas fa-trash-alt"></i> Xóa Action</button>
+    </div>
+
+    <div id="template" hidden>
+        <div id="{{Step}}" class="card">
+            <div class="card-header" id="heading{{Step}}">
+            <h5 class="mb-0">
+                <button class="btn btn-link" data-toggle="collapse" data-target="#collapse{{Step}}" aria-expanded="true" aria-controls="collapse{{Step}}">
+                    <i class="fas fa-walking"></i>
+                {{Step}}
+                </button>
+                <button id="removeStep{{index}}" class="btn btn-link" onclick="removeStep({{index}})" >
+                    <i class="fas fa-minus-octagon" style="color:red"></i>
+                </button>
+            </h5>
+            </div>
+            <div id="collapse{{Step}}" class="collapse" aria-labelledby="heading{{Step}}" data-parent="#accordion">
+                <div class="card-body">
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <td scope="row">
+                                    <div class="form-group">
+                                        <label for="inputEmail4">Số thứ tự</label>
+                                        <input data-step="{{index}}" value="{{index}}" type="text" class="form-control" id="index{{index}}" name= "index{{index}}" style="mmin-width:100px;">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="inputEmail4">Bước kế tiếp</label>
+                                        <input data-step="{{index}}" type="text" class="form-control" id="next{{Step}}" name= "next{{Step}}" style="mmin-width:100px;">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="inputEmail4">Điều kiện</label>
+                                        <select onchange='onSelectChange(this)' class="form-control" id="conditionEnum{{Step}}" name= "conditionEnum{{Step}}" > 
+                                            <option value="">Không chọn</option>
+                                            <% conditionEnum.forEach( function(item){ %>
+                                            <option value="<%= item.name %>"><%= item.name %></option>
+                                            <% }); %> 
+                                        </select>                                                                                          
+                                    </div> 
+                                </td>
+                                <td>
+                                    <div class="form-group">
+                                        <label for="inputEmail4">Nhập mô tả</label>
+                                        <input data-step="{{index}}" type="text" class="form-control" id="description{{Step}}" name= "description{{Step}}" placeholder="Mô tả">
+                                    </div>                                
+                                    <div class="form-group">
+                                        <label for="inputEmail4">URL</label>
+                                        <input data-step="{{index}}" type="text" class="form-control" id="url{{Step}}" name= "url{{Step}}" placeholder="URL">
+                                    </div>    
+                                    <div class="form-group">
+                                        <label for="inputEmail4">bước tiếp (điều kiện đúng) </label>
+                                        <input type="text" class="form-control" id="conditionTypeNext{{Step}}" name= "conditionTypeNext{{Step}}" style="min-width:100px;">
+                                    </div>                            
+                                </td>
+                                <td>
+                                    <div class="form-group">
+                                        <label for="inputPassword4">Loại</label>
+                                        <select data-step="{{index}}" class="form-control" id="typeActions{{Step}}" name= "typeActions{{Step}}" style="width:100%"> 
+                                        <option value="">Không chọn</option>
+                                        <% typeActions.forEach((type, index) => { %>
+                                            <option value = "<%= type %>"><%= type %></option>
+                                        <% }) %>
+                                        </select>                        
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="inputPassword4">Thời gian chờ</label>
+                                        <select data-step="{{index}}" class="form-control" id="wait{{Step}}" name= "wait{{Step}}" style="width:100%"> 
+                                        <option value="">Không chọn</option>
+                                        <% waitEnum.forEach((wait, index) => { %>
+                                            <option value = "<%= wait %>"><%= wait %></option>
+                                        <% }) %>
+                                        </select>                        
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="inputEmail4">Số lần lặp lại </label>
+                                        <input type="text" class="form-control" id="conditionTypeCount{{Step}}" name= "conditionTypeCount{{Step}}" style="min-width:100px;">
+                                    </div> 
+                                </td>
+                                <td>
+                                    <div class="form-group">
+                                        <label for="inputEmail4">Selector</label>
+                                        <input data-step="{{index}}" type="text" class="form-control" id="Selector{{Step}}" name= "Selector{{Step}}" placeholder="selector">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="inputEmail4">document evaluation</label>
+                                        <input data-step="{{index}}" type="text" class="form-control" id="documentEval{{Step}}" name= "documentEval{{Step}}" placeholder="document evaluation">
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="form-group">
+                                        <label for="inputEmail4">Dữ Liệu Nguồn</label>
+                                        <select data-step="{{index}}" onchange='onSelectChange(this)' class="form-control" id="selectObjects{{Step}}" name= "selectObjects{{Step}}" > 
+                                            <option value="">Không chọn</option>
+                                            <% objects.forEach( function(item){ %>
+                                            <option value="<%= item.object %>"><%= item.object %></option>
+                                            <% }); %> 
+                                        </select>                                  
+                                    </div>
+                                    <div class="form-group">
+                                    <label for="inputEmail4">Trường dữ liệu</label>
+                                        <select data-step="{{index}}" class="form-control" id="properties{{Step}}" name= "properties{{Step}}">
+                                        
+                                        </select> 
+                                    </div> 
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="row">
+                        <label for="inputEmail4">Phương thức tùy biến</label>
+                        <textarea id="code{{Step}}" data-step="{{index}}" rows="6" style="width: 100%;"></textarea>
+                    </div> 
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <% include ../layout/footer %>
+    <% include ../codeminor/script %>
+    <script>
+        var stepCount = <%= action.steps.length + 1 %>;
+        var html = {};
+        <% objects.forEach(item => { %>
+            html.<%= item.object %> = '<option value="">Không chọn</option>'
+            <% item.properties.forEach(property => { %>
+            html.<%= item.object %> = html.<%= item.object %> + ' <option value="<%= property %>"><%= property %></option>'
+            <% }); %>
+        <% }); %>     
+        var isFormCorrect = true;  
+        var isConditionCorrect = true;
+        var isTypeUrlCorrect = true;
+        var isSelectorCorrect = true;
+        var isNoneCloseNoneNext = true;
+        var isNoneName = true;         
+
+        var onSelectChange = function(e) {
+            var selector = "#" + e.id
+            var ob = $(selector).children("option:selected")[0].value;  
+            var step = $(selector)[0].dataset.step
+            // if(ob == "") return
+            if((step =="")|| (step==undefined)) {
+                $(`#properties`)[0].innerHTML = html[ob]
+            } else {
+                $(`#propertiesStep${step}`)[0].innerHTML = html[ob];
+            }
+        }
+
+        var coppyTextValue = function(addSelector, indexReceived) {
+            var value = $(addSelector)[0].value;
+            var receiItem = "";
+            if(indexReceived) {
+                receiItem = `Step${indexReceived}`;
+            } else {
+                receiItem = `Step${stepCount}`;
+            }            
+
+            var selector = addSelector + receiItem;
+            $(selector)[0].value = value;
+            $(addSelector)[0].value = ""
+        }
+        var coppySelectValue = function(addSelector, indexReceived) {
+            var value = $(addSelector)[0].selectedIndex;
+            var receiItem = "";
+            if(indexReceived) {
+                receiItem = `Step${indexReceived}`;
+            } else {
+                receiItem = `Step${stepCount}`;
+            }    
+            var selector = addSelector + receiItem;
+            $(selector)[0].selectedIndex = value;
+            $(addSelector)[0].selectedIndex = 0
+        }
+        var coppyCode = function(addSelector, indexReceived) {
+            var value = editor.getValue()
+            var receiItem = "";
+            if(indexReceived) {
+                receiItem = `Step${indexReceived}`;
+            } else {
+                receiItem = `Step${stepCount}`;
+            }    
+            var selector = addSelector + receiItem;
+            $(selector)[0].innerText = value;
+            editor.setValue("")
+        }
+
+        var addStep = function(){
+            showErrors();
+            if( isFormCorrect == false) {                
+                return;
+            };
+            var htmlString = $("#template").html();
+            htmlString = htmlString.replace(/{{Step}}/g, `Step${stepCount}`)
+            htmlString = htmlString.replace(/{{index}}/g, `${stepCount}`)
+            $("#steps > #accordion").append(htmlString)
+
+            coppyTextValue("#description")
+            coppyTextValue("#next")
+            coppyTextValue("#conditionTypeNext")
+            coppyTextValue("#conditionTypeCount")
+            coppyTextValue("#url")
+            coppyTextValue("#Selector")
+            coppyTextValue("#documentEval")
+            coppyCode("#code")
+            coppySelectValue("#selectObjects")
+            $(`#propertiesStep${stepCount}`).append($(`#properties`)[0].innerHTML);
+            coppySelectValue("#properties")
+            coppySelectValue("#typeActions")
+            coppySelectValue("#wait")
+            coppySelectValue("#conditionEnum")
+            stepCount ++;
+            $("#index")[0].value = `${stepCount}`;
+        }
+
+        var removeStep = function(indexRemove) {
+            $(`#headingStep${indexRemove}`).fadeOut("3000", function() {
+                $(this).remove();
+                $(`#collapseStep${indexRemove}`).fadeOut("slow", function() {
+                    $(this).remove();
+                });
+                renameAttAllStep(indexRemove + 1, indexRemove, false, indexRemove );
+            });
+            stepCount --;
+        }
+        var insertStep = function () {
+            showErrors();
+            if( isFormCorrect == false) {                
+                return;
+            };
+            var index = $("#index")[0].value
+            index = parseInt(index)
+            var stepsLength = $('#steps > div > div[data-parent="#accordion"]').length + 1;
+
+            renameAttAllStep(stepsLength - 1, stepsLength, true, index );
+
+            var htmlString = $("#template").html();
+            htmlString = htmlString.replace(/{{Step}}/g, `Step${index}`)
+            htmlString = htmlString.replace(/{{index}}/g, `${index}`)
+            $(htmlString).insertAfter(`#collapseStep${index-1}`)
+            coppyTextValue("#description", index);
+            coppyTextValue("#next", index);
+            coppyTextValue("#conditionTypeNext", index);
+            coppyTextValue("#conditionTypeCount", index);
+            coppyTextValue("#url", index);
+            coppyTextValue("#Selector", index);
+            coppyTextValue("#documentEval", index);
+            coppyCode("#code", index);
+            coppySelectValue("#selectObjects", index);
+            $(`#propertiesStep${index}`).append($(`#properties`)[0].innerHTML);
+            coppySelectValue("#properties", index);
+            coppySelectValue("#typeActions", index);
+            coppySelectValue("#wait", index);
+            coppySelectValue("#conditionEnum", index);
+            stepCount ++;
+            
+        }
+
+        var renameAttAllStep = function (indexFrom, indexTo, isInsert, indexStop) {
+            //Step button
+            var hasElement = true;
+            if($(`#collapseStep${indexFrom}`).length == 0) {
+                 return;
+            }
+            $(`button[data-target="#collapseStep${indexFrom}"]`).replaceWith(`<button class="btn btn-link" data-toggle="collapse" data-target="#collapseStep${indexTo}" aria-expanded="true" aria-controls="collapseStep${indexTo}"><i class="fas fa-walking"></i>Step${indexTo}</button>`);
+            $(`#headingStep${indexFrom}`).attr("id",`headingStep${indexTo}`);
+            $(`#collapseStep${indexFrom}`).attr("aria-labelledby",`headingStep${indexTo}`);
+            $(`#collapseStep${indexFrom}`).attr("id",`collapseStep${indexTo}`);
+            
+            $(`#removeStep${indexFrom}`).attr("onclick",`removeStep(${indexTo})`);
+            $(`#removeStep${indexFrom}`).attr("id",`removeStep${indexTo}`);
+            
+            $(`#index${indexFrom}`).attr("data-step",`${indexTo}`);
+            $(`#index${indexFrom}`).attr("name",`index${indexTo}`);
+            $(`#index${indexFrom}`).attr("id",`index${indexTo}`);
+            
+            $(`#descriptionStep${indexFrom}`).attr("data-step",`${indexTo}`);
+            $(`#descriptionStep${indexFrom}`).attr("name",`descriptionStep${indexTo}`);
+            $(`#descriptionStep${indexFrom}`).attr("id",`descriptionStep${indexTo}`);
+            
+            $(`#typeActionsStep${indexFrom}`).attr("data-step",`${indexTo}`);
+            $(`#typeActionsStep${indexFrom}`).attr("name",`typeActionsStep${indexTo}`);
+            $(`#typeActionsStep${indexFrom}`).attr("id",`typeActionsStep${indexTo}`);
+            
+            $(`#SelectorStep${indexFrom}`).attr("data-step",`${indexTo}`);
+            $(`#SelectorStep${indexFrom}`).attr("name",`SelectorStep${indexTo}`);
+            $(`#SelectorStep${indexFrom}`).attr("id",`SelectorStep${indexTo}`);
+            
+            $(`#selectObjectsStep1${indexFrom}`).attr("data-step",`${indexTo}`);
+            $(`#selectObjectsStep1${indexFrom}`).attr("name",`selectObjectsStep1${indexTo}`);
+            $(`#selectObjectsStep1${indexFrom}`).attr("id",`selectObjectsStep1${indexTo}`);
+            
+            $(`#propertiesStep${indexFrom}`).attr("data-step",`${indexTo}`);
+            $(`#propertiesStep${indexFrom}`).attr("name",`propertiesStep${indexTo}`);
+            $(`#propertiesStep${indexFrom}`).attr("id",`propertiesStep${indexTo}`);
+            
+            $(`#nextStep${indexFrom}`).attr("data-step",`${indexTo}`);
+            $(`#nextStep${indexFrom}`).attr("name",`nextStep${indexTo}`);
+            $(`#nextStep${indexFrom}`).attr("id",`nextStep${indexTo}`);
+            
+            $(`#urlStep${indexFrom}`).attr("data-step",`${indexTo}`);
+            $(`#urlStep${indexFrom}`).attr("name",`urlStep${indexTo}`);
+            $(`#urlStep${indexFrom}`).attr("id",`urlStep${indexTo}`);
+            
+            $(`#waitStep${indexFrom}`).attr("data-step",`${indexTo}`);
+            $(`#waitStep${indexFrom}`).attr("name",`waitStep${indexTo}`);
+            $(`#waitStep${indexFrom}`).attr("id",`waitStep${indexTo}`);
+            
+            $(`#documentEvalStep${indexFrom}`).attr("data-step",`${indexTo}`);
+            $(`#documentEvalStep${indexFrom}`).attr("name",`documentEvalStep${indexTo}`);
+            $(`#documentEvalStep${indexFrom}`).attr("id",`documentEvalStep${indexTo}`);
+            
+            $(`#conditionEnumStep${indexFrom}`).attr("data-step",`${indexTo}`);
+            $(`#conditionEnumStep${indexFrom}`).attr("name",`conditionEnumStep${indexTo}`);
+            $(`#conditionEnumStep${indexFrom}`).attr("id",`conditionEnumStep${indexTo}`);
+            
+            $(`#conditionTypeNextStep${indexFrom}`).attr("data-step",`${indexTo}`);
+            $(`#conditionTypeNextStep${indexFrom}`).attr("name",`conditionTypeNextStep${indexTo}`);
+            $(`#conditionTypeNextStep${indexFrom}`).attr("id",`conditionTypeNextStep${indexTo}`);
+            
+            $(`#conditionTypeCountStep${indexFrom}`).attr("data-step",`${indexTo}`);
+            $(`#conditionTypeCountStep${indexFrom}`).attr("name",`conditionTypeCountStep${indexTo}`);
+            $(`#conditionTypeCountStep${indexFrom}`).attr("id",`conditionTypeCountStep${indexTo}`);
+            
+            if(isInsert) {
+                if(indexStop > indexFrom - 1) return
+                renameAttAllStep(indexFrom - 1, indexTo - 1, true, indexStop);
+            } else {
+                renameAttAllStep(indexFrom + 1, indexTo + 1, false, indexStop);
+            }
+        }
+        var saveAction = function(){
+            openModal("Lưu dữ liệu", 
+            "Bạn có chắc chắn muốn lưu dữ liệu", 
+            "saveActionModal", 
+            "xác nhận", function () {
+                var count = stepCount-1;
+                var data = {};
+                data.id= '<%= action.id %>'
+                data.name = $("#actionName")[0].value
+                data.description = $("#actionDescription")[0].value
+                data.steps = []
+                for (let i = 0; i < count; i++) {
+                    var step = {}
+                    var j = i+1;
+                    step.indexStep = $(`#index${j}`)[0].value;
+                    step.next = $(`#nextStep${j}`)[0].value;
+                    step.conditionType = {};
+                    step.conditionType.next = $(`#conditionTypeNextStep${j}`)[0].value;
+                    step.conditionType.count = $(`#conditionTypeCountStep${j}`)[0].value;
+                    step.conditionType.name = $(`#conditionEnumStep${j}`).children("option:selected")[0].value;
+                    step.selector = $(`#SelectorStep${j}`)[0].value
+                    step.description = $(`#descriptionStep${j}`)[0].value
+                    step.url = $(`#urlStep${j}`)[0].value
+                    step.actionType = $(`#typeActionsStep${j}`).children("option:selected")[0].value
+                    step.wait = $(`#waitStep${j}`).children("option:selected")[0].value
+                    // step.source = {}
+                    step.documentEval = $(`#documentEvalStep${j}`)[0].value
+                    // step.source.modelObject= {}
+                    // step.source.modelObject.name = $(`#selectObjectsStep${j}`).children("option:selected")[0].value
+                    // if(step.source.modelObject.name != "") {
+                    //     step.source.modelObject.property = $(`#propertiesStep${j}`).children("option:selected")[0].value                    
+                    // } else {
+                    //     step.source.modelObject.property = ""
+                    // }
+                    step.customFunction = $(`#codeStep${j}`)[0].value
+                    data.steps.push(step)           
+                }
+                axios.post("/action/update", {
+                    data: data
+                })
+                    .then(function (response) {
+                        window.location.href = "/action"
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            })
+            
+        }
+
+        var removeAction = function() {
+            openModal("Lưu dữ liệu", 
+            "Bạn có chắc chắn muốn xóa dữ liệu", 
+            "removeActionModal", 
+            "xác nhận", function () {
+                axios.delete(`/action/<%= action.id %>`)
+                .then(function (response) {
+                    window.location.href = "/action"
+                })
+                .catch(function (error) {
+                    
+                    console.log(error);
+                });
+            })
+        }
+
+        var checkCondition = function() {
+            isConditionCorrect = true;
+            conditionSelectValue = $("#conditionEnum")[0].value;
+            if(conditionSelectValue == "")
+            return isConditionCorrect = true;
+            // var nextStep = $("#next")[0].value;
+            var conditionTypeNext = $("#conditionTypeNext")[0].value;
+            if(conditionTypeNext == "") {
+                isConditionCorrect = false
+            }
+        }
+        var checkUrl = function() {
+            isTypeUrlCorrect = true;
+            typeActions = $("#typeActions")[0].value;
+            var url = $("#url")[0].value;
+            if(typeActions == "url" && url == "") {
+                isTypeUrlCorrect = false
+            }
+            if(typeActions != "url" && url != "") {
+                isTypeUrlCorrect = false
+            }
+        }
+        var checkNoneCloseNoneNext = function() {
+            isNoneCloseNoneNext = true;
+            var typeActions = $("#typeActions")[0].value;
+            var next = $("#next")[0].value;
+            var conditionTypeNext = $("#conditionTypeNext")[0].value;
+            var isNoneNextStep = (next == "") && (conditionTypeNext == "")
+            if(typeActions != "close" && isNoneNextStep == true) {
+                isNoneCloseNoneNext = false
+            }
+            
+        }
+        var checkSelector = function() {
+            isSelectorCorrect = true;
+            var Selector = $("#Selector")[0].value
+            var typeActions = $("#typeActions")[0].value
+            if((typeActions == "button") || (typeActions == "text") || (typeActions == "select")) {
+                if(Selector == "") isSelectorCorrect = false
+            }
+        }
+
+        var checkNoneName = function() {
+            isNoneName = true
+            var name = $("#actionName")[0].value;
+            if(name == "")
+            isNoneName = false
+        }
+
+        var checkForm = function() {
+            isFormCorrect = true
+            checkSelector();
+            checkUrl();
+            checkCondition()
+            checkNoneCloseNoneNext();
+            checkNoneName();
+            if(isConditionCorrect == false ) isFormCorrect = false;
+            if(isSelectorCorrect == false ) isFormCorrect = false;
+            if(isTypeUrlCorrect == false) isFormCorrect = false;
+            if(isNoneCloseNoneNext == false) isFormCorrect = false;
+            if(isNoneName == false) isFormCorrect = false            
+            return isFormCorrect;
+        }
+
+        var showErrors = function() {
+            checkForm();
+            $('#errors').empty()
+            if(isConditionCorrect == false) {
+                $('#errors').append(`
+                    <p><i class="fas fa-exclamation-red ml-3 mr-3" style="color:red"></i>Lỗi điều kiện.</p>
+                `)                
+            }
+            if(isSelectorCorrect == false) {
+                $('#errors').append(`
+                    <p><i class="fas fa-exclamation-red ml-3 mr-3" style="color:red"></i>Selector chưa đúng</p>
+                `)                
+            }
+            if(isTypeUrlCorrect == false) {
+                $('#errors').append(`
+                    <p><i class="fas fa-exclamation-red ml-3 mr-3" style="color:red"></i>URL chưa đúng hoặc chưa chọn typeAction = url</p>
+                `)                
+            }
+            if(isNoneCloseNoneNext == false) {
+                $('#errors').append(`
+                    <p><i class="fas fa-exclamation-red ml-3 mr-3" style="color:red"></i>Chưa chọn bước kế tiếp</p>
+                `)
+            }
+            if(isNoneName == false) {
+                $('#errors').append(`
+                    <p><i class="fas fa-exclamation-red ml-3 mr-3" style="color:red"></i>Bạn chưa điền tên Action</p>
+                `)
+            }
+        }
+
+
+        $("#Selector").change(function(){ 
+            checkSelector();
+            
+        })
+        $("#url").change(function(){ 
+            checkUrl();
+            
+        })
+        $("#typeActions").change(function(){ 
+            checkUrl();
+            checkSelector();
+            checkNoneCloseNoneNext();
+        })
+        $("#conditionEnum").change(function(){ 
+            checkCondition();
+            
+        })
+        $("#conditionTypeNext").change(function(){ 
+            checkCondition();
+            checkNoneCloseNoneNext();
+        })
+        $("#next").change(function(){ 
+            checkCondition();
+            checkNoneCloseNoneNext()
+        })
+        $("#actionName").change(function() {
+            checkNoneName();
+        })
+
+        $("#checkcode").click(function(){
+            var script = editor.getValue();
+            $('#errorCode').empty();
+            axios.post("/action/checkCode", {
+                    script: script
+                })
+                .then(function(result){
+                    $('#errorCode').fadeIn(1000)
+                    if(!result.data.success) {
+                        $("#errorCode").append(`<pre class="prettyprint">${result.data.error.message }
+                        ${result.data.error.stack}
+                        </pre>`);
+                    } else {
+                        $("#errorCode").append(`<pre class="prettyprint">success</pre>`).fadeOut(3000, function() {
+                            // $(this).remove();
+                        });
+                    }
+                })
+                .catch();
+        })
+    
+    </script>
+    
+  </body>
+</html>

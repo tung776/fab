@@ -1,0 +1,28 @@
+<div id="sysInfor">
+    
+</div>
+<div id="sysinforTemplate" hidden>
+    <a id="sysInforBtn" class="btn" data-toggle="collapse" href="#sysInforCollapse" role="button" aria-expanded="false" aria-controls="sysInforCollapse">
+        <i class="fas fa-laptop-code"></i>
+    </a>    
+    <div class="collapse" id="sysInforCollapse">
+        <p>Tiến Trình tối đa: <span>{{maxWorkers}}</span></p> 
+        <p>Tiến trình Đang thực hiện: <span>{{workersWorking}}</span></p> 
+        <p>tiêu thụ ram: <span>{{memoryUsageAvg}}/worker</span></p> 
+        <p>Tiến trình Đang Đợi: <span>{{queues}}</span></p> 
+        <p>Ram Trống: <span>{{ram}} Mb</span></p> 
+    </div>
+</div>
+
+<script>
+    var renderSysInfor = function(data) {
+        $("#sysInfor").empty();        
+        var htmlString = $("#sysinforTemplate").html();
+        htmlString = htmlString.replace(/{{maxWorkers}}/g, `${data.maxWorkers}`);
+        htmlString = htmlString.replace(/{{workersWorking}}/g, `${data.workersWorking}`);
+        htmlString = htmlString.replace(/{{memoryUsageAvg}}/g, `${data.memoryUsageAvg}`);
+        htmlString = htmlString.replace(/{{queues}}/g, `${data.queues}`);
+        htmlString = htmlString.replace(/{{ram}}/g, `${data.ram}`);
+        $("#sysInfor").append(htmlString);        
+    }
+</script>

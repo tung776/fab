@@ -1,0 +1,256 @@
+
+<% include ../layout/header%>
+     <section id="portfolio" class="mt-5">
+        <div class="container">
+            <h1 class="bd-title mb-5" id="content">Chi Tiết Tài Khoản</h1>
+            <div class="form-row mb-3">
+                <img src="<%= `/accounts/pictures/${account.profile}`%>" style="width: 30%;height: 30%;">
+                <input id="imageProfile" type="file" name="profile" onchange="onFileChange()">
+            </div>
+            
+                <div class="form-row">
+                    <div class="form-group col-md-3 col-sm-6">
+                        <label for="inputEmail4">Tài Khoản</label>
+                        <input type="text" class="form-control" id="username" name= "username" placeholder="Tên tài khoản" value="<%= account.username %>">
+                    </div>
+                    <div class="form-group col-md-3 col-sm-6">
+                        <label for="inputPassword4">email</label>
+                        <input type="text" class="form-control" id="email" name= "email" placeholder="email" value="<%= account.email %>">
+                    </div>
+                    <div class="form-group col-md-3 col-sm-6">
+                        <label for="inputPassword4">Tên</label>
+                        <input type="text" class="form-control" id="name" name= "name" placeholder="Tên" value="<%= account.name %>">
+                    </div>
+                    <div class="form-group col-md-3 col-sm-6">
+                        <label for="inputPassword4">Họ</label>
+                        <input type="text" class="form-control" id="lastName" name= "lastName" placeholder="Họ" value="<%= account.lastName %>">
+                    </div>                    
+                    <div class="form-group col-md-3 col-sm-6">
+                        <label for="inputPassword4">Mật khẩu Email</label>
+                        <input type="text" class="form-control" id="pass-email" name= "pass-email" placeholder="mật khẩu email" value="<%= account.pass.email %>">
+                    </div>
+                    <div class="form-group col-md-3 col-sm-6">
+                        <label for="inputPassword4">Mật khẩu facebook</label>
+                        <input type="text" class="form-control" id="pass-facebook" name= "pass-facebook" placeholder="mật khẩu facebook" value="<%= account.pass.facebook %>">
+                    </div>
+                    <div class="form-group col-md-3 col-sm-6">
+                        <label for="inputPassword4">Mật khẩu alibaba</label>
+                        <input type="text" class="form-control" id="pass-alibaba" name= "pass-alibaba" placeholder="mật khẩu alibaba" value="<%= account.pass.alibaba %>">
+                    </div>
+                    <div class="form-group col-md-3 col-sm-6">
+                        <label for="inputPassword4">Mật khẩu 1688</label>
+                        <input type="text" class="form-control" id="pass-1688" name= "pass-1688" placeholder="mật khẩu 1688" value="<%= account.pass["1688"] %>">
+                    </div>
+                    <div class="form-group col-md-3 col-sm-3">
+                        <label for="inputPassword4">Ngày Sinh</label>
+                        <input type="text" class="form-control" id="dateOfBirth" name= "dateOfBirth" placeholder="Ngày Sinh" value="<%= account.dateOfBirth %>">
+                    </div>
+                    <div class="form-group col-md-3 col-sm-3">
+                        <label for="inputPassword4">Tháng Sinh</label>
+                        <input type="text" class="form-control" id="monthOfBirth" name= "monthOfBirth" placeholder="Tháng Sinh" value="<%= account.monthOfBirth %>">
+                    </div>
+                    <div class="form-group col-md-3 col-sm-3">
+                        <label for="inputPassword4">Năm Sinh</label>
+                        <input type="text" class="form-control" id="yearOfBirth" name= "yearOfBirth" placeholder="Năm Sinh" value="<%= account.yearOfBirth %>">
+                    </div>
+                    <div class="form-group col-md-3 col-sm-3">
+                        <label for="inputPassword4">Giới Tính <%= account.gender%></label>
+                        <select class="form-control" id="gender" name= "gender"> 
+                            <% if(account.gender == 2) { %>
+                                <option selected value = "2">Nữ</option>
+                                <option value = "1">Nam</option>
+                            <% } else { %>
+                                <option  value = "2">Nữ</option>
+                                <option selected value = "1">Nam</option>
+                            <% }; %>
+                        </select>                        
+                    </div>
+                    <div class="form-group col-md-6 col-sm-12">                        
+                        <label for="exampleFormControlSelect2">proxies</label>
+                        <select size="8" style="height: 80%;" multiple class="form-control" id="proxies" name= "proxies">                        
+                            <%
+                            var pros = account.proxies;
+                            for(var i = 0; i < proxies.length; i++) { 
+                                var isDup =false
+                            %>
+                                <% for (var j = 0; j< pros.length; j ++) { %>
+                                <% if(proxies[i]._id.toString().trim() == pros[j].toString().trim()) { 
+                                    isDup = true
+                                %>
+                                    <option selected value="<%= proxies[i]._id %>"><%= `${proxies[i].ip}:${proxies[i].port}` %></option>
+                                    
+                                <% } %>
+                                
+                                <% } 
+                                if(isDup == false) {                                
+                                %>  
+                                <option value="<%= proxies[i]._id %>"><%= `${proxies[i].ip}:${proxies[i].port}` %></option>                              
+                            <% }}; %> 
+                        </select>                                               
+                    </div>
+                    <div class="form-group col-md-6 col-sm-12">
+                        <label for="inputPassword4">facebook</label>
+                        <textarea rows="6" cols="50" class="form-control" id="facebook" name= "facebook" placeholder="Địa chỉ facebook" style="resize: none;"><%= account.facebook%></textarea>
+                    </div>
+                    <div class="form-group col-md-12 col-sm-12">
+                        <label for="inputPassword4">cookie</label>
+                        <% for(var i =0; i< account.cookie.length; i++){ %>
+                        <div style="border: 1px solid #ffff;border-radius: 5px;padding: 15px;margin: 5px;background-color: #f1f1f1;<\">
+                            <p>Name: <%= account.cookie[i].name %></p>
+                            <p>value: <%= account.cookie[i].value %></p>
+                            <p>domain: <%= account.cookie[i].domain %></p>
+                        </div>
+                        <% } %>
+                    </div>                     
+                    <div class="form-group col-md-12 col-sm-12">
+                        <label for="inputPassword4">userAgents</label>                        
+                        <select size="10" style="height: 80%;" multiple class="form-control" id="userAgents" name= "userAgents">                      
+                            <%
+                            var agents = account.userAgents;
+                            for(var i = 0; i < userAgents.length; i++) { 
+                                var isDup =false
+                            %>
+                                <% for (var j = 0; j< agents.length; j ++) { %>
+                                <% if(userAgents[i]._id.toString().trim() == agents[j].toString().trim()) { 
+                                    isDup = true
+                                %>
+                                    <option selected value="<%= userAgents[i]._id %>"><%= `${userAgents[i].agent}` %></option>
+                                    
+                                <% } %>
+                                
+                                <% } 
+                                if(isDup == false) {                                
+                                %>  
+                                <option value="<%= userAgents[i]._id %>"><%= `${userAgents[i].agent}` %></option>                              
+                            <% }}; %> 
+                        </select>                        
+                    </div>
+                    <div class="form-group col-md-12 col-sm-12">
+                        <label for="inputPassword4">Tình Trạng</label>                        
+                        <select class="form-control" id="status" name= "status">
+                            <% status.forEach( function(item){ %>
+                            <% if(item == account.status) { %>
+                            <option selected value="<%= item.trim() %>"><%= item.trim() %></option>
+                            <% }  else {%>
+                            <option value="<%= item.trim() %>"><%= item.trim() %></option>
+                            <% } %>
+                            <% }); %> 
+                        </select>
+                    </div>
+                    
+                </div>
+                <button type="button" class="btn btn-primary" onClick = "updateAccount('<%= account._id %>')">Xác Nhận Thay Đổi</button>
+                <a class="btn btn-outline-success" href="<%= `/account` %>">Thêm Tài Khoản</a>
+            
+        </div>
+    </section>
+    <% include ../layout/footer%>
+    <script>
+        var view = function(id) {
+            id = id.trim()          
+            const url = `/account/${id}`;
+            axios.get(url)
+                .then(function (response) {
+                    location.reload()
+                })
+                .catch(function (error) {
+                    // location.reload()
+                    console.log(error);
+                });
+                // location.reload();
+        };
+        var updateAccount = function(_id) {            
+            var url = `/account/${_id}`;
+            var username = $("#username").val();
+            var email = $("#email").val();
+            var name = $("#name").val();
+            var lastName = $("#lastName").val();
+            var passEmail = $("#pass-email").val();
+            var passFacebook = $("#pass-facebook").val();
+            var passAlibaba = $("#pass-alibaba").val();
+            var pass1688 = $("#pass-1688").val();
+            var dateOfBirth = $("#dateOfBirth").val();
+            var monthOfBirth = $("#monthOfBirth").val();
+            var yearOfBirth = $("#yearOfBirth").val();
+            var gender = $("#gender").children("option:selected")[0].value;
+            var status = $("#status").children("option:selected")[0].value;
+            var facebook = $("#facebook").val();
+            // var cookie = $("#cookie").val();
+            // if(cookie == "") {
+            //     cookie = []
+            // }
+            var userAgents =  $("#userAgents").children("option:selected");
+            var agentArr = [];
+            for(var i =0; i<userAgents.length; i++){ agentArr.push(userAgents[i].value.trim()) }
+            var proxies =  $("#proxies").children("option:selected");
+            var proxiesArr = []
+            for(var i =0; i<proxies.length; i++){ proxiesArr.push(proxies[i].value.trim()) }
+
+            axios.put(url, {
+                _id: _id,
+                username: username,
+                email: email,
+                name: name,
+                lastName: lastName,
+                pass: {
+                    facebook: passFacebook,
+                    email: passEmail,
+                    alibaba: passAlibaba,
+                    "1688": pass1688,
+                },
+                dateOfBirth: dateOfBirth,
+                monthOfBirth: monthOfBirth,
+                yearOfBirth: yearOfBirth,
+                gender: gender,
+                facebook: facebook,
+                // cookie: cookie,
+                userAgents: agentArr,
+                proxies: proxiesArr,
+                status: status
+            })
+                .then(function (response) {
+                    location.reload()
+                })
+                .catch(function (error) {
+                    // location.reload()
+                    console.log(error);
+                });
+                // location.reload();
+        };
+        var autoAddAccount = function() {
+            var url = `/account/auto`;
+            axios.get(url)
+                .then(function (response) {
+                    location.reload()
+                })
+                .catch(function (error) {
+                    // location.reload()
+                    console.log(error);
+                });
+        };
+        var onFileChange = function() {
+            var data = new FormData();
+            var filename = `profile-${$("#username").val()}.jpg`;
+            var files = document.querySelector("#imageProfile").files
+
+            var file = files[0];
+            data.append('profile', file, filename);
+            data.append('_id', '<%= account._id %>');
+
+            const config = {
+                headers: { 'content-type': 'multipart/form-data' }
+            }
+
+            axios.post('/account/uploadfile', data, config)
+                .then(function (response) {
+                    if(response.status) location.reload();
+                })
+                .catch(function (error) {
+                    // location.reload()
+                    console.log(error);
+                });
+        }
+        
+    </script>
+  </body>
+</html>

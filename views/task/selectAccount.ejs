@@ -1,0 +1,157 @@
+
+<!-- Modal -->
+<div class="modal fade" id="selectAccount" tabindex="-1" role="dialog" aria-labelledby="selectAccountTitle" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="selectAccountTitle">Chọn Tài khoản thực thi nhiệm vụ</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      <!--conten Modal-->
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <ul class="thumbnails row">
+                        <% if(locals.accounts !== undefined) { 
+                            const accounts = locals.accounts
+                            %>
+                        <% for(var i= 0; i < locals.accounts.length; i++) { %> 
+                        <div class="col-2 thumbnail clearfix">
+                            <div id="<%= accounts[i]._id %>" class="caption" class="pull-left" name="selectAccount">
+                                <p><%= accounts[i].username %></p>
+                                <button class="btn btn-primary" onclick='selectedAccount("<%= accounts[i]._id %>")'>Chọn</button>                                
+                            </div>
+                        </div>
+                        <% } %>
+                        <% } %>
+                    </ul>
+                </div>
+            </div>
+        </div>
+      <!--end content Modal-->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" onclick='selectAll()'>Chọn Toàn Bộ</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+    var accountSelecteds = [];
+    <% if(locals.task != undefined){ %>
+    <% if(locals.task.accounts != undefined && locals.task.accounts.length > 0){ %>
+        accountSelecteds = [
+        <% var accountsSelected = locals.task.accounts %>
+        <% for(var i=0; i < accountsSelected.length; i++ ){ %>
+        <% if (accountsSelected[i] != null) { %>
+        "<%= accountsSelected[i]._id %>",
+        <% } %>
+        <% } %>
+        ];
+    <% } %>
+    <% } %>
+    if(accountSelecteds.length > 0) {
+        var list = $('div.caption');
+        for(var i=0; i < list.length; i++) {
+            var id = list[i].id;
+            if(accountSelecteds.includes(id)) {
+                $(list[i]).addClass("selected")
+                $(`#${id} button`).text("Hủy Chọn");
+            }
+        }
+    }
+    var selectedAccount = function(accountId) {
+        var btnText = $(`#${accountId} button`).text()
+        if(btnText == "Chọn") {
+            $(`#${accountId}`).addClass("selected")
+            $(`#${accountId} button`).addClass("selected")
+            $(`#${accountId} button`).text("Hủy Chọn")
+        } else {
+            $(`#${accountId}`).removeClass("selected")
+            $(`#${accountId} button`).removeClass("selected")
+            $(`#${accountId} button`).text("Chọn")
+        }
+        var selects = $("div.caption.selected")
+        accountSelecteds=[];
+        
+        for(var i = 0; i < selects.length; i++) {
+            var id = $($("div.caption.selected")[i]).attr("id")
+            accountSelecteds.push({
+                id: id,
+                username: $(`#${id} p`).text()
+            });
+        }
+        $('#count').text(accountSelecteds.length)
+    }
+    var selectAll = function() {
+        var selects = $("div.caption")
+        accountSelecteds=[];
+        for(var i = 0; i < selects.length; i++) {
+            var accountId = selects[i].id;
+            var btnText = $(`#${accountId} button`).text()
+            if(btnText == "Chọn") {
+                $(`#${accountId}`).addClass("selected")
+                $(`#${accountId} button`).addClass("selected")
+                $(`#${accountId} button`).text("Hủy Chọn")
+            }
+        }
+
+        for(var i = 0; i < selects.length; i++) {
+            var id = $($("div.caption.selected")[i]).attr("id")
+            accountSelecteds.push({
+                id: id,
+                username: $(`#${id} p`).text()
+            });
+        }
+        $('#count').text(`${accountSelecteds.length}`)
+    }
+    var renderAccountSelected = function(){
+        for(var i =0; i < accountSelecteds.length; i++) {
+
+        }
+    }
+    var saveTask = function () {
+        var accounts = [];
+        for(var i = 0; i < accountSelecteds.length; i++) {
+            accounts.push(accountSelecteds[i].id);
+        }
+        var formData = {
+            name: $('#taskName').val(),
+            chainAction: $('#chainAction')[0].value,
+            accounts: accounts
+        }
+        url = ""
+        if($('#taskId').length > 0 ) {
+            url = "/task/update";
+            formData.id = $('#taskId').val();
+        } else {
+            url = "/task/new"
+        }
+        axios.post(url, formData)
+            .then(function (response) {
+                location.reload()
+            })
+            .catch(function (error) {
+                location.reload()
+                console.log(error);
+            });
+    }
+    
+    var remove = function(id) {
+            id = id.trim()          
+            const url = `/task/${id}`;
+            axios.delete(url)
+                .then(function (response) {
+                    location.reload()
+                })
+                .catch(function (error) {
+                    location.reload()
+                    console.log(error);
+                });
+                // location.reload();
+        }
+</script>

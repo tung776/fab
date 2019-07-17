@@ -1,0 +1,60 @@
+<div id="modal">
+  <div
+    class="modal fade"
+    id="{{modalName}}"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="{{modalName}}Label"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="{{modalName}}Label">
+            {{title}}
+          </h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">{{content}}</div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            Đóng
+          </button>
+          <button type="button" data-name="{{modalName}}" class="btn btn-primary" onclick='acceptClick(this)'>
+            {{labelBtn}}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+var modalReturn = {}
+var acceptClick = function(e) {
+  var name = e.dataset.name;
+  var func = modalReturn[name] 
+  $('#'+name)[0].click();
+  func();
+}
+var openModal = function (title, content, modalName, labelBtn, callback) {
+  modalReturn[modalName] = callback;
+  var length = $("#"+modalName).length
+  if(length == 0) {
+      var htmlString = $("#modal").html();
+      htmlString = htmlString.replace(/{{title}}/g, title)
+      htmlString = htmlString.replace(/{{content}}/g, content)
+      htmlString = htmlString.replace(/{{modalName}}/g, modalName)
+      htmlString = htmlString.replace(/{{labelBtn}}/g, labelBtn)
+      $("#modal").append(htmlString)
+  }
+}
+</script>

@@ -1,0 +1,233 @@
+    <% include ../layout/header%>
+    <div class="container register">
+        <div class="row">
+            <div class="col-md-3 register-left">
+                <a class="navbar-brand" href="/" style="font-size: 3em; color: #092136;">Fb</i><i class="fas fa-grin-hearts" style="color: #ff42bd"></i><i class="fas fa-grin-beam" style="color: #fdf625;"></i><i class="fas fa-dragon" style="color:#092136"></i></a>
+                <h3>Welcome.</h3>
+                <a name="linkCreateUser" href="/api/users/login" class="btn"><i class="fas fa-sign-in"></i> Đăng nhập</a><br/>
+            </div>
+            <div class="col-md-9 register-right">
+                
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                        <h3 class="register-heading">Tạo người dùng</h3>
+                        
+                        <div class="row register-form">
+                            
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <input id= "lastName" type="text" class="form-control" placeholder="Họ *" value="" />
+                                </div>
+                                <div class="form-group">
+                                    <input id="firstName" type="text" class="form-control" placeholder="Tên *" value="" />
+                                </div>
+                                <div class="form-group">
+                                    <input id="password" type="password" class="form-control" placeholder="Mật khẩu *" value="" />
+                                </div>
+                                <div class="form-group">
+                                    <input id="confirmPassword" type="password" class="form-control"  placeholder="Xác nhận mật khẩu *" value="" />
+                                </div>  
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <img id="image" src="">
+                                            <input id="imageFile" type="file" name="image" onchange="onFileChange()" style="width: 81px; margin-top: 0px; float: left;">
+                                        </div>
+                                        <div class="col-md-8">
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                </div>                              
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <input id="username" type="text" class="form-control"  placeholder="Tên đăng nhập" value="" />
+                                </div>
+                                <div class="form-group">
+                                    <input id="facebook" type="text" class="form-control"  placeholder="địa chỉ facebook" value="" />
+                                </div>
+                                <div class="form-group">
+                                    <input id="email" type="email" class="form-control" placeholder="Email *" value="" />
+                                </div>
+                                <div class="form-group">
+                                    <input id="phone" type="text" minlength="10" maxlength="10" name="txtEmpPhone" class="form-control" placeholder="Số điện thoại *" value="" />
+                                </div>
+                                <div class="form-group"><div id="errors"></div></div>
+                                <div class="form-group">
+                                    <button type="submit" class="btnRegister" onclick="createUser()"><i class="fas fa-user-plus"></i> Tạo Người Dùng</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                    
+            </div>
+        </div>
+    </div>
+    <% include ../layout/footer%>
+</body>
+<script>
+    var onFileChange = function() {
+        var username = $("#username")[0].value;
+        if (username == "") return;
+        var data = new FormData();
+        var filename = `profile-${$("#username").val()}.jpg`;
+        var files = document.querySelector("#imageFile").files
+
+        var file = files[0];
+        data.append('profile', file, filename);
+
+        const config = {
+            headers: { 'content-type': 'multipart/form-data' }
+        }
+
+        axios.post('/api/users/uploadfile', data, config)
+            .then(function (response) {
+                $('#image')[0].src = response.data.path;
+            })
+            .catch(function (error) {
+               
+            });
+    }
+    
+    var createUser = function() {
+        var dataForm = {
+            user: {
+                lastName: $('#lastName')[0].value,
+                firstName: $('#firstName')[0].value,
+                password: $('#password')[0].value,
+                confirmPassword: $('#confirmPassword')[0].value,
+                username: $('#username')[0].value,
+                facebook: $('#facebook')[0].value,
+                email: $('#email')[0].value,
+                phone: $('#phone')[0].value,
+                image: $('#image')[0].src
+            }
+        }
+        axios.post('/api/users/create', dataForm)
+            .then(function (response) {
+                console.log(response)
+                if(response.status == 200) {
+                    var newUser = response.data.user //email, image, token, username
+                }
+            })
+            .catch(function (error) {
+                $('#errors').empty();
+                var errorMessage = error.response.data.error
+                $('#errors').append(`<p><i class="fas fa-exclamation-red ml-3 mr-3" style="color:red"></i>${errorMessage}</p>  `)
+            });
+    }
+</script>
+<style>
+body {
+    background-color: #0c2728;
+}
+.register{
+    background: -webkit-linear-gradient(left, #5F9EA0, #00c6ff);
+    margin-top: 10%;
+    padding: 3%;
+}
+.register-left{
+    text-align: center;
+    color: #fff;
+    margin-top: 4%;
+}
+.register-left input{
+    border: none;
+    border-radius: 1.5rem;
+    padding: 2%;
+    width: 60%;
+    background: #f8f9fa;
+    font-weight: bold;
+    color: #383d41;
+    margin-top: 30%;
+    margin-bottom: 3%;
+    cursor: pointer;
+}
+.register-left a[name="linkCreateUser"]{
+    border: none;
+    border-radius: 1.5rem;
+    padding: 2%;
+    width: 60%;
+    background: #f8f9fa;
+    font-weight: bold;
+    color: #383d41;
+    margin-top: 30%;
+    margin-bottom: 3%;
+    cursor: pointer;
+}
+.register-right{
+    background: #f8f9fa;
+    border-top-left-radius: 10% 50%;
+    border-bottom-left-radius: 10% 50%;
+}
+.register-left img{
+    margin-top: 15%;
+    margin-bottom: 5%;
+    width: 25%;
+    -webkit-animation: mover 2s infinite  alternate;
+    animation: mover 1s infinite  alternate;
+}
+@-webkit-keyframes mover {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-20px); }
+}
+@keyframes mover {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-20px); }
+}
+.register-left p{
+    font-weight: lighter;
+    padding: 12%;
+    margin-top: -9%;
+}
+.register .register-form{
+    padding: 5%;
+    margin-top: 10%;
+}
+.btnRegister{
+    float: right;
+    margin-top: 10%;
+    border: none;
+    border-radius: 1.5rem;
+    padding: 2%;
+    background: #87CEFA	;
+    color: #fff;
+    font-weight: 600;
+    width: 50%;
+    cursor: pointer;
+}
+.register .nav-tabs{
+    margin-top: 3%;
+    border: none;
+    background: #87CEFA	;
+    border-radius: 1.5rem;
+    width: 28%;
+    float: right;
+}
+.register .nav-tabs .nav-link{
+    padding: 2%;
+    height: 34px;
+    font-weight: 600;
+    color: #fff;
+    border-top-right-radius: 1.5rem;
+    border-bottom-right-radius: 1.5rem;
+}
+.register .nav-tabs .nav-link:hover{
+    border: none;
+}
+.register .nav-tabs .nav-link.active{
+    width: 100px;
+    color: #000000;
+    border: 2px solid #87CEFA;
+    border-top-left-radius: 1.5rem;
+    border-bottom-left-radius: 1.5rem;
+}
+.register-heading{
+    text-align: center;
+    margin-top: 4%;
+    margin-bottom: -12%;
+    color: #495057;
+}
+</style>

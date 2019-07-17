@@ -1,0 +1,72 @@
+
+<% include ../layout/header%>
+     <section id="portfolio">
+        <div class="container">
+            <h1 class="bd-title mb-5" id="content">Cập nhật User Agent</h1>
+            
+                <div class="form-row">
+                    <div class="form-group col-md-6 col-sm-9">
+                        <label for="inputEmail4">User Agent</label>
+                        <input type="text" class="form-control" id="agent" name= "agent" placeholder="user agent">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary" onClick = "addUserAgent()">Thêm User Agent</button>
+            
+            <ul class="list-group mt-5">
+                <div class="overflow-auto">
+                <% if(userAgents != null) { %>
+                <% userAgents.forEach(function(item) { %>
+                    <li class="list-group-item justify-content-end">
+                        <input type="hidden" name="id" id='id' value = " <%= item._id %> ">
+                        <span class = "mr-4"><%= item.agent %></span>
+                        <button type="button" class="btn btn-outline-danger" onClick = "del(' <%= item._id %> ')">Xóa</button>
+                        <% if(item.status == "active") { %>
+                            <button type="button" class="btn btn-primary">Hoạt động</button>
+                        <% } %>
+                        <% if(item.status == "warning") { %>
+                            <button type="button" class="btn btn-warning">Cảnh Báo</button>
+                        <% } %>
+                        <% if(item.status == "inActive") { %>
+                            <button type="button" class="btn btn-danger">Vô Hiệu</button>
+                        <% } %>      
+                    </li>
+                <% }); %>
+                <% }; %>
+                </div>
+            </ul>
+        </div>
+    </section>
+    <% include ../layout/footer%>
+    <script>
+        var del = function(id) {
+            id = id.trim()          
+            const url = `/userAgent/${id}`;
+            axios.delete(url)
+                .then(function (response) {
+                    location.reload()
+                })
+                .catch(function (error) {
+                    location.reload()
+                    console.log(error);
+                });
+                // location.reload();
+        };
+        var addUserAgent = function() {            
+            var url = `/userAgent`;
+            var agent = $("#agent").val();
+            axios.post(url, {
+                agent: agent
+            })
+                .then(function (response) {
+                    location.reload()
+                })
+                .catch(function (error) {
+                    location.reload()
+                    console.log(error);
+                });
+                // location.reload();
+        };
+        
+    </script>
+  </body>
+</html>
