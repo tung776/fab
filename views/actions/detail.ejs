@@ -89,8 +89,8 @@
                                         <input type="text" class="form-control" id="documentEval" name= "documentEval" placeholder="document evaluation">
                                     </div>
                                     <div class="form-group row">
-                                        <button type="button" class="btn btn-outline-primary" style="margin-top: 30px; width: 40%;" onclick = 'insertStep()' data-toggle="modal" data-target="#insertStep"><i class="fas fa-indent"></i> Chèn</button>
-                                        <button type="button" class="btn btn-outline-secondary" style="margin-top: 30px; width: 60%;" onclick = 'addStep()' data-toggle="modal" data-target="#addStepModal"><i class="fas fa-network-wired"></i> Thêm bước</button>
+                                        <button type="button" class="btn btn-outline-primary" style="margin-top: 30px; width: 40%;" onclick = 'insertStep()' data-toggle="modal" data-target="#insertStep"><i class="icon-indent"></i> Chèn</button>
+                                        <button type="button" class="btn btn-outline-secondary" style="margin-top: 30px; width: 60%;" onclick = 'addStep()' data-toggle="modal" data-target="#addStepModal"><i class="icon-network-wired"></i> Thêm bước</button>
                                     </div>
                                     
                                 </td>
@@ -111,7 +111,7 @@
                                         </select> 
                                     </div>
                                     <div class="form-group">
-                                        <button type="button" class="btn btn-outline-success" onclick = 'saveAction()' data-toggle="modal" data-target="#saveActionModal" style="margin-top: 30px; width: 100%;"><i class="fas fa-save"></i> Lưu Action</button>
+                                        <button type="button" class="btn btn-outline-success" onclick = 'saveAction()' data-toggle="modal" data-target="#saveActionModal" style="margin-top: 30px; width: 100%;"><i class="icon-save"></i> Lưu Action</button>
                                     </div>
                                     
                                 </td>
@@ -127,7 +127,7 @@
                                 <div class="card-header" id="hint">
                                     <h5 class="mb-0">
                                         <button class="btn btn-link" data-toggle="collapse" data-target="#collapseHint" aria-expanded="true" aria-controls="collapseHint">
-                                        <i class="fas fa-question-circle"></i>
+                                        <i class="icon-question-circle"></i>
                                         Ví Dụ
                                         </button>
                                     </h5>
@@ -149,7 +149,7 @@
                                 <div class="card-header" id="bag">
                                     <h5 class="mb-0">
                                         <button class="btn btn-link" data-toggle="collapse" data-target="#collapsebag" aria-expanded="true" aria-controls="collapsebag">
-                                        <i class="fas fa-question-circle"></i>
+                                        <i class="icon-question-circle"></i>
                                         BAG
                                         </button>
                                     </h5>
@@ -168,7 +168,7 @@
                     <div  class="container" style="padding: 0">
                         <label for="inputEmail4">Phương thức tùy biến</label>
                         <textarea id="code" class="codemirror-textarea" rows="20" cols="100"></textarea>
-                        <button class="btn btn-primary" id="checkcode" style="margin-top: 15px;" ><i class="fas fa-shield-check"></i> Kiểm tra</button>
+                        <button class="btn btn-primary" id="checkcode" style="margin-top: 15px;" ><i class="icon-shield-check"></i> Kiểm tra</button>
                     </div>
                     <div id="errorCode" style="margin-left: 15px"></div>                    
                 </div>
@@ -186,11 +186,11 @@
                 <div class="card-header" id="headingStep<%= item.indexStep %>">
                     <h5 class="mb-0">
                         <button class="btn btn-link" data-toggle="collapse" data-target="#collapseStep<%= item.indexStep %>" aria-expanded="true" aria-controls="collapseStep<%= item.indexStep %>">
-                        <i class="fas fa-walking"></i>
+                        <i class="icon-walking"></i>
                         Step<%= item.indexStep %>
                         </button>
                         <button id="removeStep<%= item.indexStep %>" class="btn btn-link" onclick="removeStep(<%= item.indexStep %>)" >
-                        <i class="fas fa-minus-octagon" style="color:red"></i>
+                        <i class="icon-minus-octagon" style="color:red"></i>
                         </button>
                     </h5>
                 </div>
@@ -294,7 +294,7 @@
             </div>
         </div>
         
-        <button type="button" class="btn btn-warning mt-3" onClick = "removeAction()" data-toggle="modal" data-target="#removeActionModal"><i class="fas fa-trash-alt"></i> Xóa Action</button>
+        <button type="button" class="btn btn-warning mt-3" onClick = "removeAction()" data-toggle="modal" data-target="#removeActionModal"><i class="icon-trash-alt"></i> Xóa Action</button>
     </div>
 
     <div id="template" hidden>
@@ -302,11 +302,11 @@
             <div class="card-header" id="heading{{Step}}">
             <h5 class="mb-0">
                 <button class="btn btn-link" data-toggle="collapse" data-target="#collapse{{Step}}" aria-expanded="true" aria-controls="collapse{{Step}}">
-                    <i class="fas fa-walking"></i>
+                    <i class="icon-walking"></i>
                 {{Step}}
                 </button>
                 <button id="removeStep{{index}}" class="btn btn-link" onclick="removeStep({{index}})" >
-                    <i class="fas fa-minus-octagon" style="color:red"></i>
+                    <i class="icon-minus-octagon" style="color:red"></i>
                 </button>
             </h5>
             </div>
@@ -556,7 +556,7 @@
             if($(`#collapseStep${indexFrom}`).length == 0) {
                  return;
             }
-            $(`button[data-target="#collapseStep${indexFrom}"]`).replaceWith(`<button class="btn btn-link" data-toggle="collapse" data-target="#collapseStep${indexTo}" aria-expanded="true" aria-controls="collapseStep${indexTo}"><i class="fas fa-walking"></i>Step${indexTo}</button>`);
+            $(`button[data-target="#collapseStep${indexFrom}"]`).replaceWith(`<button class="btn btn-link" data-toggle="collapse" data-target="#collapseStep${indexTo}" aria-expanded="true" aria-controls="collapseStep${indexTo}"><i class="icon-walking"></i>Step${indexTo}</button>`);
             $(`#headingStep${indexFrom}`).attr("id",`headingStep${indexTo}`);
             $(`#collapseStep${indexFrom}`).attr("aria-labelledby",`headingStep${indexTo}`);
             $(`#collapseStep${indexFrom}`).attr("id",`collapseStep${indexTo}`);
@@ -758,27 +758,27 @@
             $('#errors').empty()
             if(isConditionCorrect == false) {
                 $('#errors').append(`
-                    <p><i class="fas fa-exclamation-red ml-3 mr-3" style="color:red"></i>Lỗi điều kiện.</p>
+                    <p><i class="icon-exclamation-red ml-3 mr-3" style="color:red"></i>Lỗi điều kiện.</p>
                 `)                
             }
             if(isSelectorCorrect == false) {
                 $('#errors').append(`
-                    <p><i class="fas fa-exclamation-red ml-3 mr-3" style="color:red"></i>Selector chưa đúng</p>
+                    <p><i class="icon-exclamation-red ml-3 mr-3" style="color:red"></i>Selector chưa đúng</p>
                 `)                
             }
             if(isTypeUrlCorrect == false) {
                 $('#errors').append(`
-                    <p><i class="fas fa-exclamation-red ml-3 mr-3" style="color:red"></i>URL chưa đúng hoặc chưa chọn typeAction = url</p>
+                    <p><i class="icon-exclamation-red ml-3 mr-3" style="color:red"></i>URL chưa đúng hoặc chưa chọn typeAction = url</p>
                 `)                
             }
             if(isNoneCloseNoneNext == false) {
                 $('#errors').append(`
-                    <p><i class="fas fa-exclamation-red ml-3 mr-3" style="color:red"></i>Chưa chọn bước kế tiếp</p>
+                    <p><i class="icon-exclamation-red ml-3 mr-3" style="color:red"></i>Chưa chọn bước kế tiếp</p>
                 `)
             }
             if(isNoneName == false) {
                 $('#errors').append(`
-                    <p><i class="fas fa-exclamation-red ml-3 mr-3" style="color:red"></i>Bạn chưa điền tên Action</p>
+                    <p><i class="icon-exclamation-red ml-3 mr-3" style="color:red"></i>Bạn chưa điền tên Action</p>
                 `)
             }
         }

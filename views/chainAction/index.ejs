@@ -10,14 +10,14 @@
                     <li class="list-group-item justify-content-end mt-3">
                         <h5><%= item.name %></h5>
                         <p><%= item.description %></p>
-                        <a class="btn btn-outline-primary" href="/chainAction/<%= item.id %>"><i class="fas fa-pencil"></i> Chi Tiết</a>
-                        <button onclick="remove(<%= item.id %>)" class="btn btn-outline-danger ml-3" href="/update"><i class="fas fa-trash-alt" style="color: red"></i> Xóa</button>
+                        <a class="btn btn-outline-primary" href="/chainAction/<%= item.id %>"><i class="icon-pencil"></i> Chi Tiết</a>
+                        <button onclick="remove(<%= item.id %>)" class="btn btn-outline-danger ml-3" href="/update"><i class="icon-trash-alt" style="color: red"></i> Xóa</button>
                     </li>
                 <% }); %>
                 <% }; %>
                 </div>
             </ul>
-            <a class="btn btn-primary mt-3" href="/chainAction/new"><i class="fas fa-plus"></i> Thêm mới</a>
+            <a class="btn btn-primary mt-3" href="/chainAction/new"><i class="icon-plus"></i> Thêm mới</a>
         </div>
     </section>
     <% include ../layout/footer%>

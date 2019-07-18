@@ -47,7 +47,7 @@
         <div class="container">
             <div id="message">
             
-                <p><i class="fas fa-check-square mr-5" style="color: green"></i>Đang khởi chạy bước 2 0</p>
+                <p><i class="icon-check-square mr-5" style="color: green"></i>Đang khởi chạy bước 2 0</p>
             </div>
         </div>
         -->
@@ -57,9 +57,9 @@
     <script>
         var socket = io();
         socket.on('connect', function(){
-            $("#message").append(`<p><i class="fas fa-check-square mr-5" style="color: green"></i>Đã kết nối</p>`)
+            $("#message").append(`<p><i class="icon-check-square mr-5" style="color: green"></i>Đã kết nối</p>`)
             socket.on('doAction', function(data){
-                $('#message').append(`<p><i class="fas fa-check-square mr-5" style="color: green"></i>${data.message}</p>`)
+                $('#message').append(`<p><i class="icon-check-square mr-5" style="color: green"></i>${data.message}</p>`)
                 if($("#message > p").length > 10) {
                     $("#message > p").remove("p:first");
                 }
@@ -68,7 +68,7 @@
             socket.on('errorMessage', function(data){
                 $('#errorMessage').append(`
                 <div style="color: white">
-                    <p><i class="fas fa-exclamation-red" style="color:red"></i></i>${data.message}</p>
+                    <p><i class="icon-exclamation-red" style="color:red"></i></i>${data.message}</p>
                     <pre class="prettyprint" style="color: white">${data.stack}</pre>
                 </div>
                 `)

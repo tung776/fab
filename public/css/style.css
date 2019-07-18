@@ -1,0 +1,170 @@
+@font-face {
+  font-family: 'icomoon';
+  src:  url('fonts/icomoon.eot?d9kkyp');
+  src:  url('fonts/icomoon.eot?d9kkyp#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?d9kkyp') format('truetype'),
+    url('fonts/icomoon.woff?d9kkyp') format('woff'),
+    url('fonts/icomoon.svg?d9kkyp#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-plus-circle:before {
+  content: "\f055";
+}
+.icon-plus:before {
+  content: "\f067";
+}
+.icon-users:before {
+  content: "\f0c0";
+}
+.icon-user-plus:before {
+  content: "\f234";
+}
+.icon-address-card:before {
+  content: "\f2bb";
+}
+.icon-user-minus:before {
+  content: "\f503";
+}
+.icon-layer-plus:before {
+  content: "\f5ff";
+}
+.icon-rabbit-fast:before {
+  content: "\f709";
+}
+.icon-users-medical:before {
+  content: "\f830";
+}
+.icon-pencil:before {
+  content: "\f040";
+}
+.icon-edit:before {
+  content: "\f044";
+}
+.icon-minus-circle:before {
+  content: "\f056";
+}
+.icon-check-circle:before {
+  content: "\f058";
+}
+.icon-question-circle:before {
+  content: "\f059";
+}
+.icon-minus:before {
+  content: "\f068";
+}
+.icon-exclamation-circle:before {
+  content: "\f06a";
+}
+.icon-exclamation-triangle:before {
+  content: "\f071";
+}
+.icon-chevron-up:before {
+  content: "\f077";
+}
+.icon-sign-in:before {
+  content: "\f090";
+}
+.icon-tasks:before {
+  content: "\f0ae";
+}
+.icon-save:before {
+  content: "\f0c7";
+}
+.icon-envelope:before {
+  content: "\f0e0";
+}
+.icon-angle-up:before {
+  content: "\f106";
+}
+.icon-desktop:before {
+  content: "\f108";
+}
+.icon-laptop:before {
+  content: "\f109";
+}
+.icon-exclamation:before {
+  content: "\f12a";
+}
+.icon-check-square:before {
+  content: "\f14a";
+}
+.icon-envelope-square:before {
+  content: "\f199";
+}
+.icon-trash:before {
+  content: "\f1f8";
+}
+.icon-industry:before {
+  content: "\f275";
+}
+.icon-trash-alt:before {
+  content: "\f2ed";
+}
+.icon-sign-in-alt:before {
+  content: "\f2f6";
+}
+.icon-shield-check:before {
+  content: "\f2f7";
+}
+.icon-question-square:before {
+  content: "\f2fd";
+}
+.icon-pencil-alt:before {
+  content: "\f303";
+}
+.icon-info-square:before {
+  content: "\f30f";
+}
+.icon-exclamation-square:before {
+  content: "\f321";
+}
+.icon-browser:before {
+  content: "\f37e";
+}
+.icon-desktop-alt:before {
+  content: "\f390";
+}
+.icon-industry-alt:before {
+  content: "\f3b3";
+}
+.icon-project-diagram:before {
+  content: "\f542";
+}
+.icon-walking:before {
+  content: "\f554";
+}
+.icon-grin-beam:before {
+  content: "\f582";
+}
+.icon-grin-hearts:before {
+  content: "\f584";
+}
+.icon-laptop-code:before {
+  content: "\f5fc";
+}
+.icon-layer-minus:before {
+  content: "\f5fe";
+}
+.icon-dragon:before {
+  content: "\f6d5";
+}
+.icon-tasks-alt:before {
+  content: "\f828";
+}

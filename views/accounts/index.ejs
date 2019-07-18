@@ -271,10 +271,10 @@
             socket.on('checkProxy', function(data){
                 if(data.status) {
                     $(`button[name="${data.id}"] > i`).remove("i:first");
-                    $(`button[name="${data.id}"]`).prepend('<i class="fas fa-shield-check ml-2 mr-2"></i>')
+                    $(`button[name="${data.id}"]`).prepend('<i class="icon-shield-check ml-2 mr-2"></i>')
                 } else {
                     $(`button[name="${data.id}"] > i`).remove("i:first");
-                    $(`button[name="${data.id}"]`).prepend('<i class="fas fa-exclamation-square"></i>')
+                    $(`button[name="${data.id}"]`).prepend('<i class="icon-exclamation-square"></i>')
                 }
             });
         })

@@ -1,7 +1,7 @@
 <div id="chainActionMonitorTemplate" hidden >    
     <div id = "chainActionMonitor-{{id}}" class="col-md-6" style="display: none;">
         <a id="idAccount-{{id}}" name="btnChainAction" class="btn" data-toggle="collapse" href="#idAccount-{{id}}-Collapse" role="button" aria-expanded="false" aria-controls="idAccount-{{id}}-Collapse">
-            <i class="fas fa-id-card-alt"></i> {{username}} / {{chainActionName}}
+            <i class="icon-id-card-alt"></i> {{username}} / {{chainActionName}}
         </a>
         <div class="collapse" id="idAccount-{{id}}-Collapse">
             <div class="row text-left" name="chainActionMonitor">
@@ -30,15 +30,15 @@
 </div>
 <div id = "stepsDoneTemplate" hidden>
     <div id="stepId{{indexStep}}-{{accountId}}">
-        <p><i class="fas fa-check-square mr-3" style="color: green"></i> {{message}}</p>
+        <p><i class="icon-check-square mr-3" style="color: green"></i> {{message}}</p>
         <div name = "errors">
         </div>
     </div>
 </div>
 <div id = "errorsTemplate" hidden>
     <div id="rowBugStepId{{indexStep}}-{{accountId}}" class="row">
-        <span style="color: red"><i class="fas fa-exclamation-red" style="color: red; margin-left: 15px; margin-right: 10px font-size: 14px"></i> {{errorMessage}}</span>
-        <a name="bug" id="bugStepId{{indexStep}}-{{accountId}}" class="btn" data-toggle="collapse" href="#bugStepId{{indexStep}}-{{accountId}}Collapse" role="button" aria-expanded="false" aria-controls="bugStepId{{indexStep}}-{{accountId}}Collapse"><i class="fas fa-bug"></i></a>
+        <span style="color: red"><i class="icon-exclamation-red" style="color: red; margin-left: 15px; margin-right: 10px font-size: 14px"></i> {{errorMessage}}</span>
+        <a name="bug" id="bugStepId{{indexStep}}-{{accountId}}" class="btn" data-toggle="collapse" href="#bugStepId{{indexStep}}-{{accountId}}Collapse" role="button" aria-expanded="false" aria-controls="bugStepId{{indexStep}}-{{accountId}}Collapse"><i class="icon-bug"></i></a>
         <div class="collapse" id="bugStepId{{indexStep}}-{{accountId}}Collapse">
             <p style="color: white, font-size: 14px">
         {{errorStack}}

@@ -2,9 +2,9 @@
     <div class="container register">
         <div class="row">
             <div class="col-md-3 register-left">
-                <a class="navbar-brand" href="/" style="font-size: 3em; color: #092136;">Fb</i><i class="fas fa-grin-hearts" style="color: #ff42bd"></i><i class="fas fa-grin-beam" style="color: #fdf625;"></i><i class="fas fa-dragon" style="color:#092136"></i></a>
+                <a class="navbar-brand" href="/" style="font-size: 3em; color: #092136;">Fb</i><i class="icon-grin-hearts" style="color: #ff42bd"></i><i class="icon-grin-beam" style="color: #fdf625;"></i><i class="icon-dragon" style="color:#092136"></i></a>
                 <h3>Welcome.</h3>
-                <a name="linkCreateUser" href="/api/users/login" class="btn"><i class="fas fa-sign-in"></i> Đăng nhập</a><br/>
+                <a name="linkCreateUser" href="/api/users/login" class="btn"><i class="icon-sign-in"></i> Đăng nhập</a><br/>
             </div>
             <div class="col-md-9 register-right">
                 
@@ -55,7 +55,7 @@
                                 </div>
                                 <div class="form-group"><div id="errors"></div></div>
                                 <div class="form-group">
-                                    <button type="submit" class="btnRegister" onclick="createUser()"><i class="fas fa-user-plus"></i> Tạo Người Dùng</button>
+                                    <button type="submit" class="btnRegister" onclick="createUser()"><i class="icon-user-plus"></i> Tạo Người Dùng</button>
                                 </div>
                             </div>
                         </div>
@@ -115,7 +115,7 @@
             .catch(function (error) {
                 $('#errors').empty();
                 var errorMessage = error.response.data.error
-                $('#errors').append(`<p><i class="fas fa-exclamation-red ml-3 mr-3" style="color:red"></i>${errorMessage}</p>  `)
+                $('#errors').append(`<p><i class="icon-exclamation-red ml-3 mr-3" style="color:red"></i>${errorMessage}</p>  `)
             });
     }
 </script>
