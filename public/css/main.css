@@ -5,11 +5,11 @@ body {
 }
 
 p {
-  font-size: 20px;
+  font-size: 16px;
 }
 
 p.small {
-  font-size: 16px;
+  font-size: 13px;
 }
 
 a,
@@ -136,6 +136,7 @@ header .intro-text .skills {
 .navbar-custom .navbar-brand:focus,
 .navbar-custom .navbar-brand:hover {
   color: #fff;
+
 }
 
 .navbar-custom .navbar-nav {
@@ -160,6 +161,7 @@ header .intro-text .skills {
 .navbar-custom .navbar-nav li.active a:focus,
 .navbar-custom .navbar-nav li.active a:hover {
   color: #fff;
+  font-size: 2em;
   background: #18bc9c;
 }
 
@@ -202,7 +204,7 @@ header .intro-text .skills {
 }
 
 #portfolio {
-  margin: 120px !important;
+  margin: 90px
 }
 
 section h2 {
@@ -215,13 +217,39 @@ section.success {
   color: #fff;
 }
 
+#saveActionBtn {
+  margin-top: 30px;
+  width: 100%;
+}
+
 @media (max-width: 767px) {
+  .container {
+    max-width: 100%;
+  }
+
+  #saveActionBtn {
+    margin-top: 10px;
+    width: 100%;
+  }
+
+  body {
+    font-size: 12px;
+  }
+
+  .btn {
+    font-size: 12px
+  }
+
   section {
     padding: 75px 0;
   }
 
   section.first {
     padding-top: 75px;
+  }
+
+  .form-control {
+    font-size: 12px;
   }
 }
 
@@ -589,4 +617,36 @@ fieldset[disabled] .btn-success:hover {
 
 div#maincontent {
   outline: 0;
+}
+
+nav.navbar.navbar-expand-lg.navbar-dark .navbar-brand {
+  font-size: 2em
+}
+
+@media(max-width: 992px) {
+
+  p,
+  span,
+  a,
+  input,
+  button {
+    font-size: 12px;
+  }
+
+  #portfolio {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+
+  nav.navbar.navbar-expand-lg.navbar-dark .navbar-brand {
+    font-size: 2em
+  }
+
+  nav.navbar.navbar-expand-lg.navbar-dark .navbar-toggler-icon {
+    font-size: 14px
+  }
+
+  #navbarNav {
+    font-size: 10px
+  }
 }

@@ -13,13 +13,13 @@
       <!--conten Modal-->
         <div class="container">
             <div class="row">
-                <div class="col-12">
+                <div class="col-md-12">
                     <ul class="thumbnails row">
                         <% if(locals.accounts !== undefined) { 
                             const accounts = locals.accounts
                             %>
                         <% for(var i= 0; i < locals.accounts.length; i++) { %> 
-                        <div class="col-2 thumbnail clearfix">
+                        <div class="col-md-2 col-col-sm-4 thumbnail clearfix">
                             <div id="<%= accounts[i]._id %>" class="caption" class="pull-left" name="selectAccount">
                                 <p><%= accounts[i].username %></p>
                                 <button class="btn btn-primary" onclick='selectedAccount("<%= accounts[i]._id %>")'>Chọn</button>                                
