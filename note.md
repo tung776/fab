@@ -1,3 +1,5 @@
+customize fontawsome https://icomoon.io/
+###############################################################
 Cách sửa lỗi WiredTigerIndex::insert: key too large to index:
 
 mở cmd lên và gõ lên mongo

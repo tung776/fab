@@ -1,0 +1,1 @@
+{"options":{},"indexes":[{"v":2,"key":{"_id":1},"name":"_id_","ns":"facebook.actions"},{"v":2,"key":{"_fts":"text","_ftsx":1},"name":"step.customFunction_text","ns":"facebook.actions","weights":{"step.customFunction":1},"default_language":"english","language_override":"language","textIndexVersion":3}],"uuid":"0dd4ab34d2af4ff7b3ba83e9568dc6c1"}
