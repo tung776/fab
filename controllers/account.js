@@ -516,8 +516,9 @@ exports.loginFirstEmail = async (req, res) => {
   const page = await browser.newPage();
   await helper.intializePage(page, agentData.agent);
   await page.goto(url, {
-    waitUntil: "networkidle2"
+    waitUntil: "networkidle0"
   });
+  await page.waitFor(800);
   const newPass = `@T${Math.random()
     .toString(36)
     .substr(2, 12)}`;

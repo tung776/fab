@@ -126,11 +126,7 @@
                             <% } %> 
                         <% } %>     
                         <hr/>
-                        <div class="form-row mt-3">
-                            <% actions.forEach(action => { %>
-                            <button type="button" class="btn btn-outline-primary" onclick = "action('<%= item._id %>', '<%= action.id %>')"><%= action.name %></button>
-                            <% }) %>
-                        </div>
+                        
                     </li>
                 <% }); %>
                 <% }; %>
@@ -140,18 +136,7 @@
     </section>
     <% include ../layout/footer%>
     <script>
-        var action = function(acountId, actionId) {
-            axios.post(`/action/doAction`, {
-                acountId: acountId, 
-                actionId: actionId
-            })
-                .then(function(res) {
-                    window.location.href = "monitor/action"
-                })
-                .catch(function(err) {
-                    console.log("đã có lỗi")
-                })
-        }
+        
         var view = function(id) {
             id = id.trim()          
             const url = `/account/${id}`;

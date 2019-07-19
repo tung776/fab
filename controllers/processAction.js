@@ -385,8 +385,9 @@ exports.processStep = async (step, accountId, page, countLoop) => {
       if (!url.includes("http") || !url.includes("https"))
         url = `https://${url}`;
       await page.goto(`${url}`, {
-        waitUntil: "networkidle2"
+        waitUntil: "networkidle0"
       });
+      await page.waitFor(800);
       var filePath = `${screenPath}.${step.indexStep}.png`;
       await page.screenshot({
         path: filePath
