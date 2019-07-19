@@ -42,7 +42,8 @@ app.use(
     saveUninitialized: false
   })
 );
-
+const dotenv = require("dotenv");
+dotenv.config();
 if (!isProduction) {
   app.use(errorhandler());
 }

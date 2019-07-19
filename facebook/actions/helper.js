@@ -6,6 +6,8 @@ const StealthPlugin = require("puppeteer-extra-plugin-stealth");
 puppeteer.use(StealthPlugin());
 const ProxyChain = require("proxy-chain");
 const helper = {};
+const dotenv = require("dotenv");
+dotenv.config();
 
 helper.setUpBrowser = async account => {
   const proxyData = account.proxies[0];
@@ -28,7 +30,7 @@ helper.setUpBrowser = async account => {
     "--window-size=1920x1080"
   ];
   const browser = await puppeteer.launch({
-    // headless: false,
+    headless: process.env.headless == "false" ? false : true,
     args: browserArgs
   });
   return browser;
