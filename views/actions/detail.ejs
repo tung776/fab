@@ -21,7 +21,7 @@
                     <table class="table">
                         <tbody>
                             <tr>
-                                <td scope="row">                                    
+                                <td scope="row ">                                    
                                     <div class="form-group">
                                         <label for="inputEmail4">Số thứ tự</label>
                                         <input value="1" type="text" class="form-control" id="index" name= "index" style="min-width:100px;">
@@ -758,27 +758,27 @@
             $('#errors').empty()
             if(isConditionCorrect == false) {
                 $('#errors').append(`
-                    <p><i class="icon-exclamation-red ml-3 mr-3" style="color:red"></i>Lỗi điều kiện.</p>
+                    <p><i class="icon-exclamation-circle ml-3 mr-3" style="color:red"></i>Lỗi điều kiện.</p>
                 `)                
             }
             if(isSelectorCorrect == false) {
                 $('#errors').append(`
-                    <p><i class="icon-exclamation-red ml-3 mr-3" style="color:red"></i>Selector chưa đúng</p>
+                    <p><i class="icon-exclamation-circle ml-3 mr-3" style="color:red"></i>Selector chưa đúng</p>
                 `)                
             }
             if(isTypeUrlCorrect == false) {
                 $('#errors').append(`
-                    <p><i class="icon-exclamation-red ml-3 mr-3" style="color:red"></i>URL chưa đúng hoặc chưa chọn typeAction = url</p>
+                    <p><i class="icon-exclamation-circle ml-3 mr-3" style="color:red"></i>URL chưa đúng hoặc chưa chọn typeAction = url</p>
                 `)                
             }
             if(isNoneCloseNoneNext == false) {
                 $('#errors').append(`
-                    <p><i class="icon-exclamation-red ml-3 mr-3" style="color:red"></i>Chưa chọn bước kế tiếp</p>
+                    <p><i class="icon-exclamation-circle ml-3 mr-3" style="color:red"></i>Chưa chọn bước kế tiếp</p>
                 `)
             }
             if(isNoneName == false) {
                 $('#errors').append(`
-                    <p><i class="icon-exclamation-red ml-3 mr-3" style="color:red"></i>Bạn chưa điền tên Action</p>
+                    <p><i class="icon-exclamation-circle ml-3 mr-3" style="color:red"></i>Bạn chưa điền tên Action</p>
                 `)
             }
         }

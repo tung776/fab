@@ -223,12 +223,38 @@ section.success {
 }
 
 @media (max-width: 767px) {
+  .nav-item.dropdown i {
+    font-size: 12px;
+    margin-left: 5px;
+  }
+
+  .navbar-nav .nav-link {
+    padding-right: 15px;
+  }
+
+  .navbar-nav .nav-link span {
+    padding-right: 5px;
+  }
+
+
+  button.navbar-toggler {
+    position: fixed;
+    margin-left: 82%;
+  }
+
   .container {
     max-width: 100%;
   }
 
+  #step {
+    overflow-x: scroll;
+  }
+
+  #steps #accordion {
+    overflow-x: scroll;
+  }
+
   #saveActionBtn {
-    margin-top: 10px;
     width: 100%;
   }
 
@@ -624,6 +650,14 @@ nav.navbar.navbar-expand-lg.navbar-dark .navbar-brand {
 }
 
 @media(max-width: 992px) {
+  #step {
+    overflow-x: scroll;
+  }
+
+  #step table th,
+  td {
+    min-width: 200px;
+  }
 
   p,
   span,

@@ -68,7 +68,7 @@
             socket.on('errorMessage', function(data){
                 $('#errorMessage').append(`
                 <div style="color: white">
-                    <p><i class="icon-exclamation-red" style="color:red"></i></i>${data.message}</p>
+                    <p><i class="icon-exclamation-circle" style="color:red"></i></i>${data.message}</p>
                     <pre class="prettyprint" style="color: white">${data.stack}</pre>
                 </div>
                 `)

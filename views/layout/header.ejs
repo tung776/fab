@@ -42,10 +42,12 @@
   <body>
     
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-5 fixed-top" style="">
-    <a class="navbar-brand" href="/" style="">Fb </i><i class="icon-grin-hearts" style="color: #ff42bd"></i><i class="icon-grin-beam" style="color: #fdf625;"></i><i class="icon-dragon" style="color:#505a63"></i></a>
-    <button class="navbar-toggler" type="cebookbutton" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+    <div class="row" style="padding: 10px">
+      <a class="navbar-brand" href="/" style="">Fb </i><i class="icon-grin-hearts" style="color: #ff42bd"></i><i class="icon-grin-beam" style="color: #fdf625;"></i><i class="icon-dragon" style="color:#505a63"></i></a>
+      <button class="navbar-toggler" type="cebookbutton" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </div>
     <hr/>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
@@ -61,48 +63,7 @@
         
       </ul>
       <ul class="navbar-nav flex-row ml-md-auto d-md-flex">
-        <li class="nav-item dropdown">
-          <a class="nav-item nav-link dropdown-toggle mr-md-2" href="#" id="bd-versions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <span style="font-size: 2em; color: Dodgerblue;"><i class="icon-project-diagram"></i></span>
-            Facebook
-          </a>
-          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="bd-versions">
-            <a class="dropdown-item" href="/docs/4.3/">Tự động tạo tài khoản</a>
-            <a class="dropdown-item" href="/">Thêm tài khoản thủ công</a>
-            <a class="dropdown-item" href="/">Danh sách tài khoản</a>
-            <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="/">Tự động like</a>
-              <a class="dropdown-item" href="/">Tự động thả tim</a>
-              <a class="dropdown-item" href="/">Tự động thả trả lời</a>
-              <a class="dropdown-item" href="/">Tự động xem livetream</a>
-              <a class="dropdown-item" href="/">Tự động xem mua hàng</a>
-              <a class="dropdown-item" href="/">Tự động xem tán gẫu</a>
-            
-            <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="/">Xem mẫu tán gẫu</a>
-              <a class="dropdown-item" href="/">Xem mẫu mua hàng</a>
-            
-            <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="/">Xem Báo Cáo</a>
-              <a class="dropdown-item" href="/">Tài khoản bị khóa</a>
-              <a class="dropdown-item" href="/">Mở khóa tài khoản</a>
-            
-        </li>
-        <li class="nav-item dropdown">
-          <a class="nav-item nav-link dropdown-toggle mr-md-2" href="#" id="bd-versions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <span style="font-size: 2em; color: Dodgerblue;"><i class="icon-envelope"></i></span>
-            Outlook
-          </a>
-        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="bd-versions">
-          <a class="dropdown-item" href="/docs/4.3/">Tự động tạo tài khoản</a>
-          <a class="dropdown-item" href="/">Thêm tài khoản thủ công</a>
-          <a class="dropdown-item" href="/">Danh sách tài khoản</a>          
-          <a class="dropdown-item" href="/status">Danh sách Status</a>          
-          <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="/">Xem Báo Cáo</a>
-            <a class="dropdown-item" href="/">Tài khoản bị khóa</a>
-          
-      </li>
+       
       <li class="nav-item dropdown">
         <a class="nav-item nav-link dropdown-toggle mr-md-2" href="#" id="bd-versions" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <span style="font-size: 2em; color: Dodgerblue;"><i class="icon-tasks"></i></span>
@@ -116,6 +77,7 @@
           <a class="dropdown-item" href="/proxies">proxies</a>
           <a class="dropdown-item" href="/userAgent">user agent</a>          
           <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="/status">Danh sách Status</a> 
             <a class="dropdown-item" href="/">Xem Báo Cáo</a>
           </div>
       </li>
@@ -124,17 +86,15 @@
           <span style="font-size: 2em; color: Dodgerblue;"><i class="icon-industry"></i></span>
           Hệ thống
         </a>
-        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="bd-versions">
-          <a class="dropdown-item" href="/docs/4.3/">Tạo người dùng</a>
+        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="bd-versions"> 
+          <a class="dropdown-item" href="/api/users/create">Tạo người dùng</a>
           <a class="dropdown-item" href="/">Danh sách người dùng</a>
           <a class="dropdown-item" href="/task">Nhiệm vụ</a>          
           <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="/">Xem Báo Cáo</a>
           </div>
       </li>
-
-      </ul>
-      <div class="nav-item dropdown d-lg-inline-block mb-3 mb-md-0 ml-md-3">
+      <li class="nav-item dropdown d-lg-inline-block mb-3 mb-md-0 ml-md-3">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <span style="font-size: 2em; color: Dodgerblue;"><i class="icon-address-card"></i></span>
         </a>
@@ -143,7 +103,10 @@
           <button id="logout" class="dropdown-item" onclick="logout()">Thoát</button>
           <a id="register" class="dropdown-item" href="#">Đăng Ký</a>
         </div>
-      </div>
+      </li>
+
+      </ul>
+      
       
     </div>
   </nav>

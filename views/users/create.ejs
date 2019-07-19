@@ -115,7 +115,7 @@
             .catch(function (error) {
                 $('#errors').empty();
                 var errorMessage = error.response.data.error
-                $('#errors').append(`<p><i class="icon-exclamation-red ml-3 mr-3" style="color:red"></i>${errorMessage}</p>  `)
+                $('#errors').append(`<p><i class="icon-exclamation-circle ml-3 mr-3" style="color:red"></i>${errorMessage}</p>  `)
             });
     }
 </script>
