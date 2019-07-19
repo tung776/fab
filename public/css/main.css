@@ -223,6 +223,11 @@ section.success {
 }
 
 @media (max-width: 767px) {
+  .navbar {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
   .nav-item.dropdown i {
     font-size: 12px;
     margin-left: 5px;
