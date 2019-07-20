@@ -204,7 +204,7 @@ header .intro-text .skills {
 }
 
 #portfolio {
-  margin: 90px
+  margin-top: 120px
 }
 
 section h2 {
@@ -272,12 +272,10 @@ section.success {
   }
 
   section {
-    padding: 75px 0;
+    padding: 10px 0;
   }
 
-  section.first {
-    padding-top: 75px;
-  }
+
 
   .form-control {
     font-size: 12px;
@@ -675,6 +673,8 @@ nav.navbar.navbar-expand-lg.navbar-dark .navbar-brand {
   #portfolio {
     margin-left: 10px;
     margin-right: 10px;
+    margin-top: 66px;
+    padding-top: 15px
   }
 
   nav.navbar.navbar-expand-lg.navbar-dark .navbar-brand {

@@ -31,7 +31,7 @@ const io = require("socket.io")();
 var path = require("path");
 var appPath = require("../appPath").originPath;
 let bag = {};
-bag.statusModel = StatusModel;
+
 let screenPath = "";
 let publicScreenPath = "";
 const pages = [];
@@ -479,7 +479,13 @@ sendMessage = (message, handler, data) => {
     });
   }
 };
-exports.runAction = async (account, action, page) => {
+exports.runAction = async (account, action, page, context) => {
+  if (context != undefined) {
+    bag = context;
+  } else {
+    bag.result = {};
+  }
+  bag.statusModel = StatusModel;
   acountId = account._id;
   const actionId = action._id;
 
@@ -514,7 +520,7 @@ exports.runAction = async (account, action, page) => {
   bag.accountId = acountId;
   bag.mongoose = mongoose;
   bag.account = account;
-  bag.result = {};
+
   bag.helper = helper;
   bag.human = human;
   bag.cheerio = cheerio;

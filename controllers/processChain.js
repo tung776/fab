@@ -20,6 +20,7 @@ process.on("message", async data => {
   } else {
     var account = data.account;
     const chainAction = data.chainAction;
+    let bag = data.bag;
     process.send({
       message: `${account.name} đang thực hiện nhiệm vụ ${chainAction.name}`,
       handler: `chainAction`,
@@ -38,11 +39,11 @@ process.on("message", async data => {
         }
       }
     });
-    await this.processChain(account, chainAction);
+    await this.processChain(account, chainAction, bag);
   }
 });
 
-exports.saveData = async (account, chainAction) => {
+exports.saveData = async (account, chainAction, bag) => {
   await processAction.saveData(
     {
       model: "Account",
@@ -54,7 +55,7 @@ exports.saveData = async (account, chainAction) => {
   );
 };
 
-exports.processChain = async (account, chainAction) => {
+exports.processChain = async (account, chainAction, bag) => {
   let browser;
   try {
     // const agentData = account.userAgents[0];
@@ -100,7 +101,7 @@ exports.processChain = async (account, chainAction) => {
         await helper.intializePage(page, agentData.agent);
         await helper.setCookies(page, account.cookie);
       }
-      await processAction.runAction(account, action, page);
+      await processAction.runAction(account, action, page, bag);
     }
     if (browser._connection._closed != true) {
       pages = browser.pages;

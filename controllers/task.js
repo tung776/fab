@@ -28,12 +28,16 @@ exports.run = async (req, res) => {
       .populate("actions.action");
 
     for (var i = 0; i < accounts.length; i++) {
+      let bag = {
+        result: {}
+      };
       const account = accounts[i];
       global.forkQueue.addQueue({
         path: "controllers/processChain.js",
         data: {
           account: account,
-          chainAction
+          chainAction,
+          bag
         },
         childHandler: msg => {
           // console.log(msg);
