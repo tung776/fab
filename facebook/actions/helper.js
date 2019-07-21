@@ -106,7 +106,7 @@ helper.intializePage = async (page, userAgent) => {
     }
 
     if (
-      blockedResourceTypes.indexOf(request.resourceType()) !== -1 ||
+      // blockedResourceTypes.indexOf(request.resourceType()) !== -1 ||
       skippedResources.some(resource => requestUrl.indexOf(resource) !== -1)
     ) {
       request.abort();

@@ -99,7 +99,7 @@
                 <% accounts.forEach(function(item) { %>
                     <li class="list-group-item justify-content-end">
                         <div class="form-row">
-                            <img src="<%= `/accounts/pictures/${item.profile}`%>" style="width: 5%;height: 5%;">
+                            <img id="profile" src="<%= `${item.profile}`%>" style="width: 5%;height: 5%;">
                         </div>
                         <input type="hidden" name="id" id='id' value = "<%= item._id %>">
                         <span class = "mr-4 <%= item._id %>"><%= item.username %></span>
@@ -193,6 +193,7 @@
                 yearOfBirth: yearOfBirth,
                 gender: gender,
                 facebook: facebook,
+                profile: $('#profile')[0].src,
                 cookie: cookie,
                 userAgents: agentArr,
                 proxies: proxiesArr,

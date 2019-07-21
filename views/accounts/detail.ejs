@@ -4,7 +4,7 @@
         <div class="container">
             <h1 class="bd-title mb-5" id="content">Chi Tiết Tài Khoản</h1>
             <div class="form-row mb-3">
-                <img src="<%= `/accounts/pictures/${account.profile}`%>" style="width: 30%;height: 30%;">
+                <img id="profile" src="<%= `${account.profile}`%>" style="width: 30%;height: 30%;">
                 <input id="imageProfile" type="file" name="profile" onchange="onFileChange()">
             </div>
             
@@ -203,6 +203,7 @@
                 yearOfBirth: yearOfBirth,
                 gender: gender,
                 facebook: facebook,
+                profile: $('#profile')[0].src,
                 // cookie: cookie,
                 userAgents: agentArr,
                 proxies: proxiesArr,
@@ -243,7 +244,9 @@
 
             axios.post('/account/uploadfile', data, config)
                 .then(function (response) {
-                    if(response.status) location.reload();
+                    var imageName = response.data.filename;
+                    var imagePath = `/accounts/pictures/${imageName}`
+                    $('#profile')[0].src = imagePath;
                 })
                 .catch(function (error) {
                     // location.reload()
