@@ -5,3 +5,4 @@ logs
 public/screenShot
 logs/app.log
 *.env
+dump
