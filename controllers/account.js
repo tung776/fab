@@ -20,6 +20,8 @@ const ProxyChain = require("proxy-chain");
 const { Cluster } = require("puppeteer-cluster");
 const human = require("../facebook/actions/humanAction");
 var actionModel = mongoose.model("Action");
+const dotenv = require("dotenv");
+dotenv.config();
 
 exports.index = async (req, res) => {
   try {
@@ -346,8 +348,7 @@ exports.manual = async (req, res) => {
         "--window-size=1920x1080"
       ],
       ignoreDefaultArgs: ["--disable-extensions"],
-      executablePath:
-        "C:/Program Files (x86)/Google/Chrome/Application/chrome.exe"
+      executablePath: process.env.executablePath
     });
 
     page = await helper.newPage(browser, account);

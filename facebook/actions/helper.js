@@ -63,8 +63,7 @@ helper.setUpBrowser = async account => {
     headless: process.env.headless == "false" ? false : true,
     // args: browserArgs,
     ignoreDefaultArgs: ["--disable-extensions"],
-    executablePath:
-      "C:/Program Files (x86)/Google/Chrome/Application/chrome.exe"
+    executablePath: process.env.executablePath
   });
   // const chromeArguments = browser.
   // console.log(chromeArguments);

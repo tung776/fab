@@ -1,3 +1,4 @@
 production = false
 headless = false
 SECRET = "secret"
+executablePath = "C:/Program Files (x86)/Google/Chrome/Application/chrome.exe"
