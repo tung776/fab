@@ -1,0 +1,20 @@
+
+<% include ../layout/header%>
+     <section id="portfolio">
+        <div class="container">
+            <h1 class="bd-title mb-5" id="content">Cập nhật VIP</h1>
+            
+            <div class="form-row">
+            </div>
+            <button type="submit" class="btn btn-outline-success" onClick = "addPost()"><i class="icon-plus"></i>  Thêm Post</button>
+            <button class="btn btn-outline-warning" onClick = "addLivetream()"><i class="icon-plus"></i>  Thêm Livetream</button>
+        
+            <% include ./content%>
+            <button type="submit" class="btn btn-primary" onClick = "saveVip()"><i class="icon-save"></i> Lưu Thay Đổi</button>
+            <a class="btn btn-outline-secondary" href="/vip"><i class="icon-tasks-alt" style="color: #fa0303"></i> DS VIP</a>
+        </div>
+    </section>
+    <% include ../layout/footer%>
+    <% include ./js%>
+  </body>
+</html>

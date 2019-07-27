@@ -9,6 +9,7 @@ const monitorController = require("../controllers/monitor");
 const statusController = require("../controllers/status");
 const chainActionController = require("../controllers/chainAction");
 const taskController = require("../controllers/task");
+const vipController = require("../controllers/vip");
 const multer = require("multer");
 const validateToken = require("./api/author").validateToken;
 
@@ -107,5 +108,12 @@ router.post("/task/new", validateToken, taskController.newTask);
 router.get("/task/new", validateToken, taskController.new);
 router.delete("/task/:id", validateToken, taskController.remove);
 router.get("/task/:id", validateToken, taskController.detail);
+//Vip
+router.get("/vip", validateToken, vipController.index);
+router.post("/vip/update", validateToken, vipController.update);
+router.post("/vip/new", validateToken, vipController.newVip);
+router.get("/vip/new", validateToken, vipController.new);
+router.delete("/vip/:id", validateToken, vipController.remove);
+router.get("/vip/:id", validateToken, vipController.detail);
 
 module.exports = router;

@@ -344,10 +344,24 @@ exports.manual = async (req, res) => {
         "--disable-accelerated-2d-canvas",
         "--disable-gpu",
         "--window-size=1920x1080"
-      ]
+      ],
+      ignoreDefaultArgs: ["--disable-extensions"],
+      executablePath:
+        "C:/Program Files (x86)/Google/Chrome/Application/chrome.exe"
     });
 
     page = await helper.newPage(browser, account);
+    page.on("close", async () => {
+      console.log("page closed");
+      const pages = await browser.pages();
+      if (pages[0] != undefined && pages[0] != null) {
+        const cookies = await helper.getCookies(pages[0]);
+        if (cookies && cookies.length > 0) {
+          account.cookie = cookies;
+          account.save();
+        }
+      }
+    });
     // await helper.intializePage(page, agentData.agent);
     // await page.setExtraHTTPHeaders({
     //   "x-frame-options": 'allow-from https://accounts.google.com"'

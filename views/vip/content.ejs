@@ -1,0 +1,89 @@
+<div class="form" style="padding: 20px 15px; border: solid 1px #e6e6e6; border-radius: 5px; margin: 10px 0px;">
+    <div class="form-row">
+ 
+        <div class="col-md-12 col-sm-12">
+            <label for="inputEmail4">Facebook VIP</label>
+            <% if(locals.vip != undefined) { %>
+            <input type="text" class="form-control" id="vipId" name= "vipId" hidden value="<%= locals.vip._id %>">
+            <input type="text" class="form-control" id="facebook" name= "facebook" placeholder="facebook" value="<%= locals.vip.facebook %>">
+            
+            <% } else { %>
+            <input type="text" class="form-control" id="facebook" name= "facebook" placeholder="facebook">
+            <% } %>            
+        </div>    
+    </div>
+    <div class="form-row mt-2">
+        <div class="col-md-12 col-sm-12">
+            <div id="posts">
+            <% if(locals.vip != undefined) { 
+                if(locals.vip.posts != undefined) {
+                if(locals.vip.posts.length > 0) { 
+                for(var i=0; i< locals.vip.posts.length; i++) { %>
+                <div class="row mt-1" id="post<%= i %>">
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control" id="input<%= i %>" name= "post" placeholder="post" value="<%= locals.vip.posts[i] %>">
+                    </div>
+                    <div class="col-sm-6">
+                        <button id="removePost<%= i %>" class="btn btn-danger" onClick = "removePost(<%= i %>)"><i class="icon-minus"></i>  Xóa Post</button>
+                    </div>
+                        
+                </div>
+                <% }
+                 }
+                 }
+                 } %>
+            </div>
+        </div>
+    </div>
+    <div class="form-row mt-2">
+        <div class="col-md-12 col-sm-12">
+            <div id="livetreams">
+            <% if(locals.vip != undefined) { 
+                if(locals.vip.livetreams != undefined) {
+                if(locals.vip.livetreams.length > 0) { 
+                for(var i=0; i< locals.vip.livetreams.length; i++) { %>
+                <div class="row mt-1" id="livetream<%= i %>">
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control" id="input<%= i %>" name= "livetream" placeholder="livetream" value="<%= locals.vip.livetreams[i] %>">
+                    </div>
+                    <div class="col-sm-6">
+                        <button id="removeLivetream<%= i %>" class="btn btn-danger" onClick = "removeLivetream(<%= i %>)"><i class="icon-minus"></i>  Xóa livetream</button>
+                    </div>
+                        
+                </div>
+                <% } 
+                 } 
+                 } 
+                 } %>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    
+    
+</script>
+<style>
+    div.caption {
+        border: 1px solid #f8f8f8;
+        padding: 10px;
+        border-radius: 5px;
+        background-color: #dfdfdf;
+        margin-bottom: 8px;
+        margin-right: 0px;
+        margin-left: -15px;
+    }
+    div.caption.selected {
+        border: 1px solid #f8f8f8;
+        padding: 10px;
+        border-radius: 5px;
+        background-color: #0f9703;
+        margin-bottom: 8px;
+        margin-right: 0px;
+        margin-left: -15px;
+        color: white;
+    }
+    div.caption p {
+        font-size: 14px
+    }
+</style>

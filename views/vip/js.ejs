@@ -1,0 +1,153 @@
+<div id="template" hidden>
+    <div class="row mt-1" id="post{{index}}">
+        <div class="col-sm-6">
+            <input type="text" class="form-control" id="input{{index}}" name= "post" placeholder="post" value="">
+        </div>
+        <div class="col-sm-6">
+            <button id="removePost{{index}}" class="btn btn-danger" onClick = "removePost({{index}})"><i class="icon-minus"></i>  Xóa Post</button>
+        </div>
+            
+    </div>
+</div>
+<div id="templateLivetream" hidden>
+    <div class="row mt-1" id="livetream{{index}}">
+        <div class="col-sm-6">
+            <input type="text" class="form-control" id="input{{index}}" name= "livetream" placeholder="livetream" value="">
+        </div>
+        <div class="col-sm-6">
+            <button id="removeLivetream{{index}}" class="btn btn-danger" onClick = "removeLivetream({{index}})"><i class="icon-minus"></i>  Xóa livetream</button>
+        </div>
+            
+    </div>
+</div>
+<script>
+    var indexPost = 0;
+    var indexLivetream = 0;
+    <% if(locals.vip != undefined) {
+        if(locals.vip.post != undefined ){
+        if(locals.vip.posts.length > 0) { %>
+        indexPost = <%= locals.vip.posts.length + 1 %>;
+    <% }}} %>
+    <% if(locals.vip != undefined) {
+        if(locals.vip.livetreams != undefined ){
+        if(locals.vip.livetreams.length > 0) { %>
+        indexLivetream = <%= locals.vip.livetreams.length + 1 %>;
+    <% }}} %>
+
+    var removeLivetream = function(indexRemove){
+        $(`#livetream${indexRemove}`).fadeOut("3000", function() {
+            $(this).remove();
+            renameAttLivetream(indexRemove + 1, indexRemove, false, indexRemove );
+            indexLivetream --;
+        });
+    }
+    var addLivetream = function(){
+        var htmlString = $("#templateLivetream").html();        
+        htmlString = htmlString.replace(/{{index}}/g, `${indexLivetream}`);
+        $("#livetreams").append(htmlString);        
+        indexLivetream ++;
+    }
+    var removePost = function(indexRemove){
+        $(`#post${indexRemove}`).fadeOut("3000", function() {
+            $(this).remove();
+            renameAttPost(indexRemove + 1, indexRemove, false, indexRemove );
+            indexPost --;
+        });
+    }
+    var renameAttPost = function(indexFrom, indexTo, isInsert, indexStop) {
+            
+        var hasElement = true;
+        if($(`#post${indexFrom}`).length == 0) {
+                return;
+        }
+        $(`#input${indexFrom}`).attr("name",`input${indexTo}`);
+        $(`#input${indexFrom}`).attr("id",`input${indexTo}`);
+        $(`#removePost${indexFrom}`).attr("onClick",`removePost(${indexTo})`);
+        $(`#removePost${indexFrom}`).attr("id",`removePost${indexTo}`);
+        $(`#post${indexFrom}`).attr("id",`post${indexTo}`);
+        if(isInsert) {
+            if(indexStop > indexFrom - 1) return
+            renameAttPost(indexFrom - 1, indexTo - 1, true, indexStop);
+        } else {
+            renameAttPost(indexFrom + 1, indexTo + 1, false, indexStop);
+        }        
+    }
+    var renameAttLivetream = function(indexFrom, indexTo, isInsert, indexStop) {
+            
+        var hasElement = true;
+        if($(`#livetream${indexFrom}`).length == 0) {
+                return;
+        }
+        $(`#input${indexFrom}`).attr("name",`input${indexTo}`);
+        $(`#input${indexFrom}`).attr("id",`input${indexTo}`);
+        $(`#removeLivetream${indexFrom}`).attr("onClick",`removeLivetream(${indexTo})`);
+        $(`#removeLivetream${indexFrom}`).attr("id",`removeLivetream${indexTo}`);
+        $(`#livetream${indexFrom}`).attr("id",`livetream${indexTo}`);
+        if(isInsert) {
+            if(indexStop > indexFrom - 1) return
+            renameAttLivetream(indexFrom - 1, indexTo - 1, true, indexStop);
+        } else {
+            renameAttLivetream(indexFrom + 1, indexTo + 1, false, indexStop);
+        }        
+    }
+    var addPost = function(){
+        var htmlString = $("#template").html();        
+        htmlString = htmlString.replace(/{{index}}/g, `${indexPost}`);
+        $("#posts").append(htmlString);        
+        indexPost ++;
+    }
+    var saveVip = function () {
+        var posts= [];
+        var livetreams = [];
+        var elPosts = $('input[name="post"]');
+        for(var i=0; i < elPosts.length; i++) {
+            var _post = $(elPosts[i]).val();
+            if(_post != undefined && _post != "") {
+                posts.push(_post);
+            }
+        }
+        var elLivetreams = $('input[name="livetream"]');
+        for(var i=0; i < elLivetreams.length; i++) {
+            var _livetream = $(elLivetreams[i]).val();
+            if(_livetream != undefined && _livetream != "") {
+                livetreams.push(_livetream);
+            }
+        }
+        
+        var formData = {
+            facebook: $('#facebook').val(),
+            posts: posts,
+            livetreams: livetreams
+        }
+        url = ""
+        if($('#vipId').length > 0 ) {
+            url = "/vip/update";
+            formData.id = $('#vipId').val();
+        } else {
+            url = "/vip/new"
+        }
+        axios.post(url, formData)
+            .then(function (response) {
+                location.reload()
+            })
+            .catch(function (error) {
+                location.reload()
+                console.log(error);
+            });
+    }
+    
+    var remove = function(id) { 
+        id = id.trim()          
+            const url = `/vip/${id}`;
+            axios.delete(url)
+                .then(function (response) {
+                    location.reload()
+                })
+                .catch(function (error) {
+                    location.reload()
+                    console.log(error);
+                });
+                // location.reload();
+        }
+    
+</script>

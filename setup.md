@@ -1,3 +1,8 @@
+document.querySelectorAll('div[data-testid = "UFI2CommentsList/root_depth_0"] a[data-testid="UFI2ReactionLink"][aria-pressed="false"]')
+
+backup data:
+mongodump --db facebook
+
 ### 1. Gõ lệnh:
 
 2. npm install --save puppeteer
@@ -12,12 +17,12 @@ Accepts requests and returns requests.
 Firstly, we install Apache2 and node.js on our Ubuntu server :
 sudo apt-get update
 sudo apt-get install apache2 nodejs
-Next thing we need to proxy all requests incoming on port 80 through the URL of a node.js application to the running local node.js process. For this, we need to install/enable mod_proxy and mod_proxy_http modules on the Apache server :
+Next thing we need to proxy all requests incoming on port 80 through the URL of a node.js application to the running local node.js process. For this, we need to install/enable mod*proxy and mod_proxy_http modules on the Apache server :
 a2enmod proxy
 a2enmod proxy_http
 So now the exciting part begins. We need to configure the Apache server to proxy requests to node.js applications. We’ll then configure a VirtualHost for this :
 #/etc/apache2/sites-available/abcd.conf
-<VirtualHost _:80>
+<VirtualHost *:80>
 ServerAdmin webmaster@localhost
 ServerName mySite
 ServerAlias www.abcd.com

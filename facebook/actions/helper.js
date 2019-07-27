@@ -1,3 +1,4 @@
+const path = require("path");
 const cheerio = require("cheerio");
 const fs = require("fs");
 var mongoose = require("mongoose");
@@ -9,6 +10,34 @@ const helper = {};
 const dotenv = require("dotenv");
 dotenv.config();
 
+helper.randomMin2Max = function(min, max) {
+  var rand = Math.random() * (max - min) + min;
+  return rand;
+};
+helper.randomFromArray = function(array) {
+  var item = array[Math.floor(Math.random() * array.length)];
+  return item;
+};
+helper.randomCommentsLike = function() {
+  let comments = [
+    "Hay quá",
+    "like",
+    "hi",
+    "hì hì",
+    "cố lên",
+    "goodluck",
+    ".",
+    "!",
+    "bravo",
+    "zui ghê",
+    "ẹc",
+    "up",
+    "lên nào"
+  ];
+  var item = helper.randomFromArray(comments);
+  return item;
+};
+
 helper.setUpBrowser = async account => {
   const proxyData = account.proxies[0];
   const strProxy = `http://${proxyData.user}:${proxyData.pass}@${
@@ -16,6 +45,7 @@ helper.setUpBrowser = async account => {
   }:${proxyData.port}`;
   const proxy = await ProxyChain.anonymizeProxy(strProxy);
   let browserArgs = [
+    "--lang=vi-VN,vi",
     "--disable-notifications",
     "--disable-infobars",
     "--ignore-certifcate-errors",
@@ -26,13 +56,18 @@ helper.setUpBrowser = async account => {
     "--disable-dev-shm-usage",
     "--disable-accelerated-2d-canvas",
     "--disable-gpu",
-    "--hide-scrollbars",
+    // "--hide-scrollbars",
     "--window-size=1920x1080"
   ];
   const browser = await puppeteer.launch({
     headless: process.env.headless == "false" ? false : true,
-    args: browserArgs
+    // args: browserArgs,
+    ignoreDefaultArgs: ["--disable-extensions"],
+    executablePath:
+      "C:/Program Files (x86)/Google/Chrome/Application/chrome.exe"
   });
+  // const chromeArguments = browser.
+  // console.log(chromeArguments);
   return browser;
 };
 
@@ -86,9 +121,16 @@ helper.intializePage = async (page, userAgent) => {
     "tiqcdn"
   ];
 
-  await page.setViewport({ width: 1028, height: 768 });
+  // await page.setViewport({ width: 1080, height: 1920 });
   await page.setRequestInterception(true);
   await page.setUserAgent(userAgent);
+
+  page.on("console", msg => {
+    const leng = msg.args().length;
+    for (let i = 0; i < leng; i += 1) {
+      console.log(`${i}: ${msg.args()[i]}`);
+    }
+  });
 
   page.on("request", request => {
     const requestUrl = request._url.split("?")[0].split("#")[0];
@@ -141,6 +183,25 @@ helper.intializePage = async (page, userAgent) => {
   */
 };
 
+helper.elementClick = async (element, page) => {
+  var isVisible = false;
+  try {
+    isVisible = await helper.isVisible(element, page);
+  } catch (error) {
+    isVisible = false;
+  }
+  console.log("isVisible = ", isVisible);
+  if (isVisible) {
+    try {
+      await element.click();
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+  return false;
+};
+
 helper.getCookies = async page => {
   const { cookies } = await page._client.send("Network.getAllCookies", {});
 
@@ -191,6 +252,14 @@ helper.newPage = async (browser, account) => {
   console.log("đang cài cookie, account.cookie = ", account.cookie.length);
   await helper.intializePage(page, agentData.agent);
   await helper.setCookies(page, account.cookie);
+
+  try {
+    await page.addScriptTag({
+      path: path.join(__dirname, "../../common/scraper.js")
+    });
+  } catch (error) {
+    console.log(error);
+  }
   // page.on("pageerror", () => {
   //   const br = page.browser();
   //   page.close();
@@ -210,6 +279,26 @@ helper.newPage = async (browser, account) => {
   //   }
   // });
   return page;
+};
+
+helper.scroll = async (page, scrollDelay = 1000) => {
+  let previousHeight;
+  try {
+    while (mutationsSinceLastScroll > 0 || initialScrolls > 0) {
+      mutationsSinceLastScroll = 0;
+      initialScrolls--;
+      previousHeight = await page.evaluate("document.body.scrollHeight");
+      await page.evaluate("window.scrollTo(0, document.body.scrollHeight)");
+      await page
+        .waitForFunction(`document.body.scrollHeight > ${previousHeight}`, {
+          timeout: 600000
+        })
+        .catch(e => console.log("scroll failed"));
+      await page.waitFor(scrollDelay);
+    }
+  } catch (e) {
+    console.log(e);
+  }
 };
 
 helper.isVisible = async (element, page) => {

@@ -65,6 +65,7 @@ require("./models/Action");
 require("./models/ChainAction");
 require("./models/Status");
 require("./models/Task");
+require("./models/Vip");
 // mongoose.set("useFindAndModify", false);
 
 app.use(compression());
@@ -95,7 +96,7 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render("error");
+  // res.render("error");
   console.log("hello");
 });
 // }

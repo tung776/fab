@@ -185,7 +185,27 @@ exports.run = async (req, res) => {
                 }
                 break;
               case "errorMessage":
+                var p = path.resolve("logs");
+                var dir = "";
+
                 if (account) {
+                  dir = `${p}/${account.username}`;
+                  fs.ensureDir(dir)
+                    .then(() => {
+                      fs.writeJson(`${dir}/error.json`, {
+                        message: msg.message,
+                        step: msg.data.step,
+                        stack: msg.data.stack
+                      })
+                        .then(() => {
+                          console.log("success!");
+                        })
+                        .catch(err => {
+                          console.error(err);
+                        });
+                    })
+                    .catch();
+
                   global.io.emit(`errorMessage`, {
                     account: accountData,
                     message: msg.message,
@@ -201,6 +221,23 @@ exports.run = async (req, res) => {
                       ram: Math.floor(os.freemem() / 1024 / 1024)
                     }
                   });
+                } else {
+                  dir = `${p}`;
+                  fs.ensureDir(dir)
+                    .then(() => {
+                      fs.writeJson(`${dir}/error.json`, {
+                        message: msg.message,
+                        step: msg.data.step,
+                        stack: msg.data.stack
+                      })
+                        .then(() => {
+                          console.log("success!");
+                        })
+                        .catch(err => {
+                          console.error(err);
+                        });
+                    })
+                    .catch();
                 }
                 break;
 

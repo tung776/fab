@@ -11,6 +11,7 @@ require("../models/Account");
 require("../models/Action");
 require("../models/ChainAction");
 require("../models/Status");
+require("../models/Vip");
 mongoose.connect("mongodb://localhost/facebook");
 var accountModel = mongoose.model("Account");
 var StatusModel = mongoose.model("Status");
@@ -385,7 +386,8 @@ exports.processStep = async (step, accountId, page, countLoop) => {
       if (!url.includes("http") || !url.includes("https"))
         url = `https://${url}`;
       await page.goto(`${url}`, {
-        waitUntil: "networkidle0"
+        waitUntil: "domcontentloaded",
+        timeout: 8000
       });
       await page.waitFor(800);
       var filePath = `${screenPath}.${step.indexStep}.png`;
