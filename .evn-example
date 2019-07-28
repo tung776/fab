@@ -1,5 +1,11 @@
 production = true
 headless = true
 SECRET = "thanhtung776"
-executablePath = "google-chrome-stable"
-PORT = 8080
+executablePath = "/usr/bin/google-chrome-stable"
+PORT = 3000
+
+production = false
+headless = false
+SECRET = "thanhtung776"
+executablePath = "C:/Program Files (x86)/Google/Chrome/Application/chrome.exe"
+PORT = 3000
