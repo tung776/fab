@@ -1,4 +1,5 @@
-production = false
-headless = false
-SECRET = "secret"
-executablePath = "C:/Program Files (x86)/Google/Chrome/Application/chrome.exe"
+production = true
+headless = true
+SECRET = "thanhtung776"
+executablePath = "google-chrome-stable"
+PORT = 8080

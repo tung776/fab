@@ -199,6 +199,20 @@ Thao tác này nhằm cấu hình server để đáp ứng các requests tại r
 Bạn có thể thêm các location block bổ sung vào cùng một server block để cấp quyền truy cập vào các ứng dụng khác trên cùng một server. Ví dụ: nếu bạn cũng đang chạy một ứng dụng Node.js khác trên port 8081, bạn có thể thêm location block này để cho phép truy cập vào nó thông qua http://example.com/app2:
 
 Hướng dẫn cài đặt Node.js App trên Ubuntu 16.04 - Ảnh 4.
+########################
+location / {
+proxy_pass http://localhost:8080;
+proxy_http_version 1.1;
+proxy_set_header Upgrade $http_upgrade;
+                proxy_set_header Connection 'upgrade';
+                proxy_set_header Host $host;
+proxy_cache_bypass $http_upgrade;
+		# First attempt to serve request as file, then
+		# as directory, then fall back to displaying a 404.
+		try_files $uri \$uri/ =404;
+}
+
+############################################
 Khi bạn đã hoàn tất việc thêm các location blocks cho các ứng dụng, hãy lưu và thoát ra.
 
 Chắc chắn phải đảm bảo bạn tạo ra bất kỳ lỗi cú pháp nào bằng cách nhập:
