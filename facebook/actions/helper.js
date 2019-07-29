@@ -14,6 +14,15 @@ helper.randomMin2Max = function(min, max) {
   var rand = Math.random() * (max - min) + min;
   return rand;
 };
+helper.hideChatWindow = async function(page) {
+  var hideToggler = await page.$$("#fbDockChatBuddylistNub .hideToggler");
+  if (hideToggler.length > 0) {
+    await page.waitFor(500);
+    await page.click("#fbDockChatBuddylistNub .fbNubButton");
+    await page.waitFor(400);
+  }
+};
+
 helper.randomFromArray = function(array) {
   var item = array[Math.floor(Math.random() * array.length)];
   return item;
@@ -307,21 +316,26 @@ helper.scroll = async (page, scrollDelay = 1000) => {
 };
 
 helper.isVisible = async (element, page) => {
-  const isVisibleHandle = await page.evaluateHandle(e => {
-    const style = window.getComputedStyle(e);
-    return (
-      style &&
-      style.display !== "none" &&
-      style.visibility !== "hidden" &&
-      style.opacity !== "0"
-    );
-  }, element);
-  var visible = await isVisibleHandle.jsonValue();
-  const box = await element.boxModel();
-  if (visible && box) {
-    return true;
+  try {
+    const isVisibleHandle = await page.evaluateHandle(e => {
+      const style = window.getComputedStyle(e);
+      return (
+        style &&
+        style.display !== "none" &&
+        style.visibility !== "hidden" &&
+        style.opacity !== "0"
+      );
+    }, element);
+    var visible = await isVisibleHandle.jsonValue();
+    const box = await element.boxModel();
+    if (visible && box) {
+      return true;
+    }
+    return false;
+  } catch (error) {
+    console.log(error);
+    return false;
   }
-  return false;
 };
 
 helper.saveOneData = async (querries, accountData) => {
