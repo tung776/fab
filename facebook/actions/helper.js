@@ -59,12 +59,18 @@ helper.setUpBrowser = async account => {
     // "--hide-scrollbars",
     "--window-size=1920x1080"
   ];
-  const browser = await puppeteer.launch({
-    headless: process.env.headless == "false" ? false : true,
-    // args: browserArgs,
-    ignoreDefaultArgs: ["--disable-extensions"],
-    executablePath: process.env.executablePath
-  });
+  let browser = null;
+  try {
+    browser = await puppeteer.launch({
+      headless: process.env.headless == "false" ? false : true,
+      args: browserArgs,
+      ignoreDefaultArgs: ["--disable-extensions"],
+      executablePath: process.env.executablePath
+    });
+  } catch (error) {
+    console.log("=========== Da co loi ==================");
+    console.log(error);
+  }
   // const chromeArguments = browser.
   // console.log(chromeArguments);
   return browser;

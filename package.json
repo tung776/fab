@@ -1,4 +1,17 @@
 {
+  "name": "FabManager",
+  "version": "1.0.0",
+  "description": "Quản lý facebook tự động đa tài khoản",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "keywords": [
+    "facebook"
+  ],
+  "repository": "https://github.com/tung776/fab.git",
+  "author": "Nguyen Thanh Tung <thanhtung776@gmail.com>",
+  "license": "MIT",
   "dependencies": {
     "app-root-path": "^2.2.1",
     "axios": "^0.19.0",
