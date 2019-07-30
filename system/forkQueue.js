@@ -11,6 +11,9 @@ var isProduction = process.env.NODE_ENV === "production";
 exports.getWorkersWorking = () => {
   return workersWorking.length;
 };
+exports.getWorkers = () => {
+  return workersWorking;
+};
 exports.getMaxWorkers = () => {
   return maxWorkers;
 };
@@ -92,14 +95,15 @@ exports.DoTask = queue => {
 
   const { path, data, childHandler } = queue;
   let worker = null;
-  // if (isProduction) {
-  //   worker = fork(path);
-  // } else {
-  //   worker = fork(path, {
-  //     silent: true,
-  //     execArgv: ["--inspect=10245"]
-  //   });
-  // }
+  var isProduction = process.env.production == "true" ? true : false;
+  if (isProduction) {
+    worker = fork(path);
+  } else {
+    worker = fork(path, {
+      // silent: true,
+      execArgv: ["--inspect=10245"]
+    });
+  }
   worker = fork(path);
 
   worker.on("message", childData => {

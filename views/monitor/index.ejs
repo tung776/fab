@@ -12,6 +12,10 @@
     </div>
         <div class="ml-1 mr-1">
             <div role="main" class="inner cover">
+                <div class="row">
+                    <textarea rows="2" class="form-control" id="sendComment" name= "sendComment" placeholder="comment" style="resize: none; width: 80%"></textarea>
+                    <button id="sendComment" onclick="sendComment()" type="button" class="btn btn-outline-primary" onclick = 'insertStep()' data-toggle="modal" data-target="#insertStep"><i class="icon-indent"></i> Chèn</button>
+                </div>
                 <div class="row" id="chainActions">
                     <% include ./chainActionMonitor %>
                 </div>
@@ -47,6 +51,20 @@
                 renderSysInfor(data.memory)
             })
         })
+
+        var sendComment = function() {
+            var data = $('#sendComment').val();
+            axios.post("/monitor/sendComment", {
+                    data: data
+                })
+                    .then(function (response) {
+                        console.log(response)
+                    })
+                    .catch(function (error) {
+                        // 
+                        console.log(error);
+                    });
+        }
     </script>
     
     <style>

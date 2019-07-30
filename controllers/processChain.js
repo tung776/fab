@@ -6,6 +6,10 @@ var processAction = require("./processAction");
 const path = require("path");
 var fs = require("fs-extra");
 var isProduction = process.env.NODE_ENV === "production";
+var account = null;
+let browser;
+let currentAction;
+let currentPage;
 
 process.on("message", async data => {
   // mongoose = require("mongoose");
@@ -13,12 +17,72 @@ process.on("message", async data => {
 
   // // var account = null;
 
-  if (data.isCheckMemory) {
+  if (data.isLivetream) {
+    var comment = data.comment;
+    if (currentPage) {
+      if (currentPage._closed == false) {
+        var page = currentPage;
+        var url = await page.url();
+        if (
+          !url.includes("videos") ||
+          !url.includes("https://www.facebook.com")
+        ) {
+          return;
+        }
+
+        //comment
+
+        await helper.hideChatWindow(page);
+        console.log("begin comment...");
+        var inputCommentSelector = "div.UFIAddCommentInput";
+
+        var inputComment = await page.$(inputCommentSelector);
+        if (inputComment) {
+          try {
+            await inputComment.click();
+          } catch (error) {}
+          await page.waitFor(1000);
+          inputComment = await page.$(
+            'div[contenteditable="true"][data-testid="ufi_comment_composer"]'
+          );
+          // inputComment = await page.$(
+          //   'div.UFIAddCommentInput input[name="add_comment_text"]'
+          // );
+
+          try {
+            if (inputComment && inputComment != null) {
+              random = helper.randomMin2Max(800, 1200);
+              await page.waitFor(random);
+              console.log("typing ....");
+              await inputComment.type(` ${comment}`, {
+                delay: 110
+              });
+              await page.waitFor(800);
+              await page.keyboard.press("Enter", {
+                delay: 100
+              });
+              await page.waitFor(300);
+              await page.keyboard.press("Enter", {
+                delay: 100
+              });
+            } else {
+              console.log("inputComment = null");
+            }
+          } catch (error) {
+            console.log("đã có lỗi");
+            console.log("Chi Tiết", error);
+          }
+        }
+
+        //end comment
+      }
+    }
+  } else if (data.isCheckMemory) {
     process.send({
       memory: process.memoryUsage().heapUsed / 1024 / 1024
     });
   } else {
-    var account = data.account;
+    account = data.account;
     const chainAction = data.chainAction;
     let bag = data.bag;
     process.send({
@@ -77,6 +141,7 @@ exports.processChain = async (account, chainAction, bag) => {
     let pages = [];
     for (let i = 0; i < chainAction.actions.length; i++) {
       const action = chainAction.actions[i].action;
+      currentAction = action;
       let page = null;
       pages.forEach(async item => {
         if (item.name == chainAction.actions[i].pageForAction) {
@@ -101,6 +166,7 @@ exports.processChain = async (account, chainAction, bag) => {
         await helper.intializePage(page, agentData.agent);
         await helper.setCookies(page, account.cookie);
       }
+      currentPage = page;
       await processAction.runAction(account, action, page, bag);
     }
     if (browser._connection._closed != true) {

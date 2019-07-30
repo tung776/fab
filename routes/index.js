@@ -86,6 +86,11 @@ router.delete("/status/:id", validateToken, statusController.deleteStatus);
 //monitor
 router.get("/monitor", validateToken, monitorController.index);
 router.get("/monitor/action", validateToken, monitorController.action);
+router.post(
+  "/monitor/sendComment",
+  validateToken,
+  monitorController.sendComment
+);
 
 //chain action
 router.get("/chainAction", validateToken, chainActionController.index);

@@ -107,6 +107,13 @@ header .intro-text .skills {
   font-weight: 300;
 }
 
+#sendComment {
+  margin-top: 1%;
+  width: 18%;
+  margin-left: 1%;
+  margin-bottom: 1%;
+}
+
 @media (min-width: 768px) {
   header .container {
     padding-top: 200px;
