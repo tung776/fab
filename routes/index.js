@@ -29,6 +29,7 @@ router.get("/", homeController.index);
 router.use("/api", require("./api"));
 router.get("/proxies", validateToken, proxyController.index);
 router.post("/proxies", validateToken, proxyController.addProxy);
+router.post("/proxies/save", validateToken, proxyController.saveProxy);
 router.delete("/proxies/:id", validateToken, proxyController.deleteProxy);
 
 router.get("/userAgent", validateToken, userAgentController.index);
@@ -48,6 +49,12 @@ router.get(
   accountController.checkAllProxy
 );
 router.get("/account/auto", validateToken, accountController.auto);
+router.get(
+  "/account/createOutlook",
+  validateToken,
+  accountController.createOutlook
+);
+
 router.post("/account", validateToken, accountController.addAccount);
 router.get("/account/:id", validateToken, accountController.detailAccount);
 router.put("/account/:id", validateToken, accountController.updateAccount);

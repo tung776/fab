@@ -5,7 +5,7 @@
             <h1 class="bd-title mb-5" id="content">Cập nhật Proxy</h1>
             
                 <div class="form-row">
-                    <div class="form-group col-md-6 col-sm-9">
+                    <div class="form-group col-md-4 col-sm-9">
                         <label for="inputEmail4">Proxy</label>
                         <input type="text" class="form-control" id="ip" name= "ip" placeholder="Địa chỉ IP">
                     </div>
@@ -21,29 +21,36 @@
                         <label for="inputPassword4">Mật khẩu</label>
                         <input type="text" class="form-control" id="pass" name= "pass" placeholder="mật khẩu">
                     </div>
+                    <div class="form-group col-md-2 col-sm-6">
+                        <label for="inputPassword4">Vị Trí</label>
+                        <input type="text" class="form-control" id="location" name= "location" placeholder="Vi trí">
+                    </div>
                 </div>
                 <button type="submit" class="btn btn-primary" onClick = "addProxy()">Thêm Proxy</button>
             
             <ul class="list-group mt-5">
                 <div class="overflow-auto">
-                <% if(proxies != null) { %>
+                <% if(proxies != null) { var i = 0 %>
                 <% proxies.forEach(function(item) { %>
-                    <li class="list-group-item justify-content-end">
-                            <input type="hidden" name="id" id='id' value = " <%= item._id %> ">
-                            <span class = "mr-4"><%= item.ip %></span>
-                            <span class = "mr-4"><%= item.port %></span>
-                            <span class = "mr-4"><%= item.user %></span>
-                            <span class = "mr-4"><%= item.pass %></span>
-                            <button type="button" class="btn btn-outline-danger" onClick = "del(' <%= item._id %> ')">Xóa</button>
+                    <li class="list-group-item justify-content-end" id="<%= item._id %>">
+                            <input type="hidden" name="id" id='id' value = "<%= item._id %>">
+                            <input type="text" id="editIp" class = "mr-4" value="<%= item.ip %>"/>
+                            <input type="text" id="editPort" class = "mr-4" value="<%= item.port %>"/>
+                            <input type="text" id="editUser" class = "mr-4" value="<%= item.user %>"/>
+                            <input type="text" id="editPass" class = "mr-4" value="<%= item.pass %>"/>
+                            <input type="text" id="editLocation" class = "mr-4" value="<%= item.location %>"/>
+                            <button type="button" class="btn btn-outline-danger mt-2" onclick = "save('<%= item._id %>')">Lưu</button>
+                            <button type="button" class="btn btn-outline-danger mt-2" onClick = "del('<%= item._id %>')">Xóa</button>
                             <% if(item.status == "active") { %>
-                                <button type="button" class="btn btn-primary">Hoạt động</button>
+                                <button type="button" class="btn btn-primary mt-2">Hoạt động</button>
                             <% } %>
                             <% if(item.status == "warning") { %>
-                                <button type="button" class="btn btn-warning">Cảnh Báo</button>
+                                <button type="button" class="btn btn-warning mt-2">Cảnh Báo</button>
                             <% } %>
                             <% if(item.status == "inActive") { %>
-                                <button type="button" class="btn btn-danger">Vô Hiệu</button>
-                            <% } %>      
+                                <button type="button" class="btn btn-danger mt-2">Vô Hiệu</button>
+                            <% } %>  
+                            <% i ++ %>    
                     </li>
                 <% }); %>
                 <% }; %>
@@ -66,27 +73,53 @@
                 });
                 // location.reload();
         };
-        var addProxy = function() {            
+        var addProxy = function() { 
+            var local = location;           
             var url = `/proxies`;
             var ip = $("#ip").val();
             var port = $("#port").val();
             var user = $("#user").val();
             var pass = $("#pass").val();
+            var location = $("#location").val();
             axios.post(url, {
                 ip: ip,
                 port: port,
                 user: user,
-                pass: pass
+                pass: pass,
+                location
             })
                 .then(function (response) {
-                    location.reload()
+                    window.location.reload()
                 })
                 .catch(function (error) {
-                    location.reload()
+                    window.location.reload()
                     console.log(error);
                 });
                 // location.reload();
         };
+        var save = function(id) {
+            var ip = $(`#${id} #editIp`).val();
+            var port = $(`#${id} #editPort`).val();
+            var user = $(`#${id} #editUser`).val();
+            var pass = $(`#${id} #editPass`).val();
+            var location = $(`#${id} #editLocation`).val();
+            var url = `/proxies/save`;
+            axios.post(url, {
+                _id: id,
+                ip: ip,
+                port: port,
+                user: user,
+                pass: pass,
+                location
+            })
+                .then(function (response) {
+                    window.location.reload()
+                })
+                .catch(function (error) {
+                    window.location.reload()
+                    console.log(error);
+                });
+        }
         
 
         

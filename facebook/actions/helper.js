@@ -14,6 +14,108 @@ helper.randomMin2Max = function(min, max) {
   var rand = Math.random() * (max - min) + min;
   return rand;
 };
+helper.lastName = function() {
+  var lastNames = [
+    "Nguyen",
+    "Nguyen",
+    "Thao",
+    "Thanh",
+    "Phuong",
+    "Tran",
+    "Tam",
+    "Nhat",
+    "Le",
+    "Nhan",
+    "Hoang",
+    "Huynh",
+    "Phan",
+    "Phan",
+    "Dang",
+    "Bui",
+    "Do",
+    "Ho",
+    "Ngo",
+    "Duong",
+    "Bao",
+    "Bao",
+    "Bich",
+    "Bao",
+    "Ai",
+    "Thuy",
+    "Ai",
+    "Ly",
+    "Thien",
+    "Thuc",
+    "Thu",
+    "Thi",
+    "Vo"
+  ];
+  return helper.randomFromArray(lastNames);
+};
+helper.firstName = function() {
+  var firstNames = [
+    "Hong",
+    "Khanh",
+    "Linh",
+    "Nhan",
+    "Nhi",
+    "Thi",
+    "Thy",
+    "Ha",
+    "Hang",
+    "Nhan",
+    "Nhien",
+    "Chi",
+    "Dao",
+    "Hoa",
+    "Hong",
+    "Huong",
+    "Le",
+    "Linh",
+    "Mai",
+    "Ngoc",
+    "Thi",
+    "Thao",
+    "Tho",
+    "Thu",
+    "Trang",
+    "Tuyet",
+    "Xuan",
+    "Cuc",
+    "Quynh",
+    "Lien",
+    "Loan",
+    "Bang",
+    "Tam",
+    "Anh",
+    "Chau",
+    "Ha",
+    "Han",
+    "Hue",
+    "Quyen",
+    "Tram",
+    "Tran",
+    "Truc",
+    "Uyen",
+    "Nga",
+    "Nhu",
+    "Tuyen",
+    "Tho",
+    "Duyen",
+    "Thao"
+  ];
+  return helper.randomFromArray(firstNames);
+};
+helper.birthday = function() {
+  day = Math.floor(helper.randomMin2Max(1, 28));
+  month = Math.floor(helper.randomMin2Max(1, 12));
+  year = Math.floor(helper.randomMin2Max(1992, 2002));
+  return {
+    day,
+    month,
+    year
+  };
+};
 helper.hideChatWindow = async function(page) {
   var hideToggler = await page.$$("#fbDockChatBuddylistNub .hideToggler");
   if (hideToggler.length > 0) {

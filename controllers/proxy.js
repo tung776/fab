@@ -14,6 +14,7 @@ exports.index = async (req, res) => {
           pass: item.pass,
           port: item.port,
           user: item.userName,
+          location: item.location,
           status: "active"
         });
         await proxy.save();
@@ -26,15 +27,29 @@ exports.index = async (req, res) => {
   }
 };
 exports.addProxy = async (req, res) => {
-  const { ip, pass, port, user } = req.body;
+  const { ip, pass, port, user, location } = req.body;
   let proxy = await new proxyModel({
     _id: new mongoose.Types.ObjectId(),
     ip,
     pass,
     port,
     user,
+    location,
     status: "active"
   });
+  await proxy.save();
+  proxies = await proxyModel.find();
+
+  return res.render("proxies/index", { proxies: proxies });
+};
+exports.saveProxy = async (req, res) => {
+  const { _id, ip, pass, port, user, location } = req.body;
+  let proxy = await proxyModel.findByIdAndUpdate(
+    {
+      _id
+    },
+    { _id, ip, pass, port, user, location }
+  );
   await proxy.save();
   proxies = await proxyModel.find();
 

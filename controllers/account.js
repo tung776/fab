@@ -41,6 +41,210 @@ exports.index = async (req, res) => {
     console.log(error);
   }
 };
+exports.createOutlook = async (req, res) => {
+  res.send("okie");
+  var firstName;
+  var lastName;
+  var birthday = helper.birthday();
+  var charactorArr = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k"];
+  var username = "";
+  var emailProvider = "outlook.com";
+
+  var proxiesList = await proxyModel.find();
+  var err = false;
+  let proxyData;
+  let browser;
+  let page;
+  var userAgent;
+  let userAgentList = await userAgentModel.find();
+  do {
+    try {
+      err = false;
+      proxyData = helper.randomFromArray(proxiesList);
+      let strProxy = `http://${proxyData.user}:${proxyData.pass}@${
+        proxyData.ip
+      }:${proxyData.port}`;
+      let proxyStr = await ProxyChain.anonymizeProxy(strProxy);
+      browser = await puppeteer.launch({
+        headless: false,
+        args: [
+          "--disable-notifications",
+          `--proxy-server=${proxyStr}`,
+          "--no-sandbox",
+          "--disable-setuid-sandbox",
+          "--disable-dev-shm-usage",
+          "--disable-accelerated-2d-canvas",
+          "--disable-gpu",
+          "--window-size=1920x1080"
+        ]
+      });
+
+      page = await browser.newPage();
+      userAgent = helper.randomFromArray(userAgentList);
+      await helper.intializePage(page, userAgent.agent);
+      console.log("====================================================== ");
+      console.log("proxy = ", `${strProxy}   ${proxyData.location}`);
+      console.log("userAgent = ", userAgent.agent);
+      console.log("====================================================== ");
+
+      await page.goto("https://signup.live.com/signup");
+    } catch (error) {
+      err = true;
+      console.log(error);
+      await page.close();
+      await browser.close();
+    }
+  } while (err);
+
+  // email / username
+  // ----------------
+
+  await page.waitFor("#liveSwitch", { visible: true });
+  await page.click("#liveSwitch", { delay: 10 });
+  await page.waitFor(100);
+  let error = null;
+  do {
+    firstName = helper.firstName();
+    lastName = helper.lastName();
+    var random = helper.randomFromArray(charactorArr);
+    random = random + helper.randomFromArray(charactorArr);
+    random = `${random}${Math.floor(helper.randomMin2Max(10, 100))}`;
+    username = `${firstName}${lastName}${birthday.year}${
+      birthday.day
+    }${random}`;
+    await page.type("#MemberName", username, { delay: 40 });
+    await page.waitFor(250);
+    await page.click("#iSignupAction", { delay: 20 });
+
+    await page.waitFor(1000);
+    error = await page.$("#MemberNameError");
+
+    // TODO: there is an issue here where if one username fails, the next will
+    // always also fail
+    if (error) {
+      await page.waitFor(1000);
+      await page.focus("#MemberName");
+      for (let i = 0; i < username.length + 8; ++i) {
+        await page.keyboard.press("Backspace");
+      }
+
+      await page.waitFor(1000);
+    }
+  } while (error);
+  // password
+  // -------------------
+  var password = "@Namdinh1";
+
+  await page.waitFor("#Password", { visible: true });
+  await page.waitFor(100);
+  await page.type("#Password", password, { delay: 10 });
+  await page.waitFor(100);
+  await page.click("#iOptinEmail", { delay: 10 });
+  await page.waitFor(100);
+  await page.click("#iSignupAction", { delay: 30 });
+
+  // first and last name
+  // -------------------
+
+  await page.waitFor("#FirstName", { visible: true });
+  await page.waitFor(100);
+  await page.type("#FirstName", firstName, { delay: 30 });
+  await page.waitFor(120);
+  await page.type("#LastName", lastName, { delay: 35 });
+  await page.waitFor(260);
+  await page.click("#iSignupAction", { delay: 25 });
+
+  // birth date
+  // ----------
+
+  try {
+    await page.waitFor("#BirthMonth", { visible: true });
+    await page.waitFor(100);
+    await page.select("#BirthMonth", `${birthday.month}`);
+    await page.waitFor(120);
+    await page.select("#BirthDay", `${birthday.day}`);
+    await page.waitFor(260);
+    await page.select("#BirthYear", `${birthday.year}`);
+    await page.waitFor(220);
+    await page.click("#iSignupAction", { delay: 8 });
+  } catch (error) {
+    console.log(error);
+  }
+
+  //chờ nhập captcha
+  await page.waitFor(1000 * 50); // 50s
+
+  // main account page
+  // -----------------
+
+  await page.waitFor(1000);
+  await page.goto(
+    "https://www.outlook.com/?refd=account.microsoft.com&fref=home.banner.profile"
+  );
+
+  var email = `${username}@${emailProvider}`;
+  var cookie = await helper.getCookies(page);
+  var user = {
+    username,
+    name: firstName,
+    lastName,
+    email,
+    pass: {
+      email: password,
+      facebook: password,
+      "1688": password,
+      alibaba: password,
+      other: password
+    },
+    cookie,
+    gender: 1,
+    proxies: [proxyData._id],
+    userAgents: [userAgent._id]
+  };
+  const account = new accountModel({
+    _id: new mongoose.Types.ObjectId(),
+    ...user
+  });
+  const result = await account.save();
+
+  // email inbox first-run
+  // ---------------------
+
+  await page.waitFor(800);
+
+  try {
+    await Promise.race([
+      page.waitFor(2000),
+      page.waitFor(".dialog button.nextButton", { visible: true }),
+      page.waitFor(".dialog button.primaryButton", { visible: true })
+    ]);
+  } catch (error) {
+    console.log(error);
+  }
+
+  // keep pressing next...
+  while (true) {
+    if (!(await page.$(".dialog button.nextButton"))) break;
+    await page.click(".dialog button.nextButton", { delay: 5 });
+    await page.waitFor(220);
+  }
+
+  // wait until "let's go" button appears...
+  // while (true) {
+  //   await page.waitFor(1000);
+  //   if (await page.$(".dialog button.primaryButton")) break;
+  // }
+
+  // await page.waitFor(120);
+  // await Promise.all([
+  //   page.waitForNavigation({ timeout: 10000 }),
+  //   page.click(".dialog button.primaryButton", { delay: 7 })
+  // ]);
+
+  // should now be at https://outlook.live.com/mail/inbox
+
+  // res.send(result);
+};
 exports.auto = async (req, res) => {
   try {
     let accounts = [];
@@ -315,6 +519,22 @@ exports.checkIp = async _id => {
     // browser.close();
   }
 };
+exports.getUsedProxies = async () => {
+  const accounts = await accountModel.find().populate("proxies");
+  let usedProxies = [];
+  accounts.forEach(account => {
+    account.proxies.forEach(proxy => {
+      let strProxy = `${proxy.ip}:${proxy.port}`;
+      // if (!usedProxies.includes()) {
+      usedProxies.push({
+        account: account,
+        proxy: strProxy
+      });
+      // }
+    });
+  });
+  return usedProxies;
+};
 exports.manual = async (req, res) => {
   const _id = req.params.id;
   let browser,
@@ -328,6 +548,23 @@ exports.manual = async (req, res) => {
       .populate("proxies")
       .populate("userAgents");
     const proxyData = account.proxies[0];
+    let usedProxies = await this.getUsedProxies();
+    let filters = usedProxies.filter(used => {
+      let str = `${proxyData.ip}:${proxyData.port}`;
+      if (used.proxy == str) {
+        return true;
+      }
+    });
+    if (filters.length > 2) {
+      console.log("trùng địa chỉ ip");
+      console.log("Gồm các tài khoản sau");
+      console.log(filters[0].proxy);
+      filters.forEach(item => {
+        console.log(",", item.account.username);
+      });
+      return;
+    }
+    console.log("filters.length = ", filters.length);
     const strProxy = `http://${proxyData.user}:${proxyData.pass}@${
       proxyData.ip
     }:${proxyData.port}`;

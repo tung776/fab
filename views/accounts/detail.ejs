@@ -77,14 +77,14 @@
                                 <% if(proxies[i]._id.toString().trim() == pros[j].toString().trim()) { 
                                     isDup = true
                                 %>
-                                    <option selected value="<%= proxies[i]._id %>"><%= `${proxies[i].ip}:${proxies[i].port}` %></option>
+                                    <option selected value="<%= proxies[i]._id %>"><%= `${proxies[i].ip}:${proxies[i].port}-${proxies[i].location}` %></option>
                                     
                                 <% } %>
                                 
                                 <% } 
                                 if(isDup == false) {                                
                                 %>  
-                                <option value="<%= proxies[i]._id %>"><%= `${proxies[i].ip}:${proxies[i].port}` %></option>                              
+                                <option value="<%= proxies[i]._id %>"><%= `${proxies[i].ip}:${proxies[i].port}-${proxies[i].location}` %></option>                              
                             <% }}; %> 
                         </select>                                               
                     </div>

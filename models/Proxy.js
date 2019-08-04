@@ -17,7 +17,8 @@ var ProxySchema = new mongoose.Schema(
     },
     user: String,
     pass: String,
-    status: String
+    status: String,
+    location: String
   },
   { timestamps: true }
 );

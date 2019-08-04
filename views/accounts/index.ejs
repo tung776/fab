@@ -59,7 +59,7 @@
                         <label for="exampleFormControlSelect2">proxies</label>
                         <select size="8" style="height: 80%;" multiple class="form-control" id="proxies" name= "proxies">
                             <% proxies.forEach( function(item){ %>
-                            <option value="<%= item._id %>"><%= `${item.ip}:${item.port}` %></option>
+                            <option value="<%= item._id %>"><%= `${item.ip}:${item.port}---${item.location}` %></option>
                             <% }); %> 
                         </select>                                               
                     </div>
