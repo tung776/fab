@@ -9,6 +9,16 @@ const ProxyChain = require("proxy-chain");
 const helper = {};
 const dotenv = require("dotenv");
 dotenv.config();
+require("../../models/Proxy");
+require("../../models/Cookie");
+require("../../models/UserAgent");
+require("../../models/Account");
+require("../../models/Action");
+require("../../models/ChainAction");
+require("../../models/Status");
+require("../../models/Task");
+require("../../models/Vip");
+var accountModel = mongoose.model("Account");
 
 helper.randomMin2Max = function(min, max) {
   var rand = Math.random() * (max - min) + min;
@@ -260,7 +270,9 @@ helper.intializePage = async (page, userAgent) => {
 
           console.log("The file was saved!");
         });
-      } catch (error) {}
+      } catch (error) {
+        console.log("da co loi", error);
+      }
     }
 
     if (
@@ -457,6 +469,392 @@ helper.saveOneData = async (querries, accountData) => {
   }
 };
 
+helper.uploadProfile = async (page, pictureProfilePath) => {
+  try {
+    let content = await page.content();
+    const $ = cheerio.load(content);
+    await page.evaluate(() => {
+      window.scroll(0, 0);
+    });
+    try {
+      await page.waitForSelector(
+        "div.fbTimelineProfilePicSelector.fbTimelineNullProfilePicSelector a",
+        {
+          timeout: 5000,
+          visible: true
+        }
+      );
+    } catch (error) {}
+    const image = page.$(
+      "div.fbTimelineProfilePicSelector.fbTimelineNullProfilePicSelector a"
+    );
+    if (!image) {
+      console.log("đã có ảnh đại diện");
+      return true;
+    }
+    await page.focus(
+      "div.fbTimelineProfilePicSelector.fbTimelineNullProfilePicSelector a"
+    );
+    await page.waitFor(1200);
+    await page.click(
+      "div.fbTimelineProfilePicSelector.fbTimelineNullProfilePicSelector a"
+    );
+    try {
+      await page.waitForSelector('div.uiLayer div[role="dialog"]', {
+        timeout: 10000,
+        visible: true
+      });
+      await page.waitFor(1000);
+      console.log("chuẩn bị tải ảnh");
+      const result = await helper.uploadFile(
+        page,
+        'div.uiLayer div[role="dialog"] input[type="file"]',
+        pictureProfilePath
+      );
+      if (result) {
+        try {
+          try {
+            await page.waitFor(
+              'div[data-testid="profile_pic_crop_dialog"] div[behavior="free"]',
+              { visible: true }
+            );
+          } catch (error) {}
+          await page.waitFor(1000);
+          console.log("đang điều chỉnh slide ảnh");
+          await page.waitFor(1000 * 60 * 1);
+          try {
+            await page.waitFor(".uiOverlayFooter .rfloat a", {
+              timeout: 5000,
+              visible: true
+            });
+          } catch (error) {}
+          await page.click(".uiOverlayFooter .rfloat a");
+
+          try {
+            await page.focus('button[data-testid="profilePicSaveButton"]');
+            await page.click('button[data-testid="profilePicSaveButton"]');
+            try {
+              await page.waitForNavigation({ timeout: 10000 });
+            } catch (error) {}
+            await page.waitFor(1000);
+          } catch (error) {}
+        } catch (error) {}
+      }
+      return result;
+    } catch (error) {}
+  } catch (error) {
+    console.log("đã có lỗi: ", error);
+    return false;
+  }
+};
+helper.testUploadImage = async (page, filePath) => {
+  const btnTakePicture = 'div[aria-label="Search by image"]';
+  try {
+    await page.waitFor(btnTakePicture, { timeout: 5000, visible: true });
+  } catch (error) {}
+  await page.click(btnTakePicture);
+  try {
+    await page.waitFor("#qbp", { timeout: 5000, visible: true });
+    await page.waitFor(500);
+    await page.click("#qbp .qbwr a");
+  } catch (error) {}
+  try {
+    await page.waitFor("#qbp #qbfile", { timeout: 5000, visible: true });
+    console.log("sẵn sàng tải file", filePath);
+    await helper.uploadFile(page, "#qbp #qbfile", filePath);
+    console.log("thực hiện xong");
+  } catch (error) {}
+};
+helper.uploadFile = async (page, selector, filePath) => {
+  try {
+    try {
+      console.log("selector: ", selector);
+      console.log("đang tải file: ", filePath);
+      try {
+        await page.waitFor(selector, { timeout: 20000, visible: true });
+      } catch (error) {
+        console.log(" không tìm thấy ", selector);
+      }
+
+      const input = await page.$(selector);
+
+      try {
+        await input.uploadFile(filePath);
+      } catch (error) {
+        console.log("đã có lỗi", error);
+      }
+
+      return true;
+    } catch (error) {
+      console.log("Đã có lỗi ", error);
+      console.log("không tìm thấy: ", selector);
+      return false;
+    }
+  } catch (error) {
+    console.log("upload file thất bại: ", error);
+    return false;
+  }
+};
+
+helper.activeFacebook = async (page, account) => {
+  console.log("đang lấy email kích hoạt");
+  const proxyData = account.proxies[0];
+
+  const emails = await helper.getMails({
+    page,
+    query: "registration@facebookmail.com"
+  });
+  console.log("emails ", emails.length);
+  let url = "";
+  emails.forEach(mail => {
+    const $ = cheerio.load(mail.text);
+    const items = $(
+      'a[href*="https://www.facebook.com/n/?confirmemail.php"][data-auth="NotApplicable"]'
+    );
+
+    if (items.length > 0) {
+      url = $(items[0]).attr("href");
+    }
+  });
+  console.log("============================================");
+  console.log(url);
+  await page.goto(url);
+  try {
+    await page.waitFor(500);
+    await page.click('div[data-click="profile_icon"] '); //vào trang chủ tài khoản
+    try {
+      await page.waitForNavigation();
+    } catch (error) {}
+    account.facebook = await page.url();
+    let accountData = await accountModel.findById(account._id);
+    accountData.facebook = account.facebook;
+    console.log("facebook = ", account.facebook);
+    await accountData.save();
+  } catch (error) {
+    console.log("da co loi", error);
+  }
+  try {
+    await page.waitForSelector('.uiOverlayFooterButtons a[role="button"]', {
+      visible: true,
+      timeout: 15000
+    });
+  } catch (error) {}
+  await page.waitFor(500);
+  console.log("hủy thay đổi hình nền");
+  await page.click('.uiOverlayFooterButtons a[role="button"]'); //hủy thay đổi hình nền
+  try {
+    await page.waitForSelector(".uiOverlayFooter button.layerConfirm", {
+      timeout: 15000
+    });
+  } catch (error) {}
+  await page.waitFor(500);
+  console.log("chấp nhận thay đổi thông tin cơ bản");
+  await page.click(".uiOverlayFooter button.layerConfirm"); //chấp nhận thay đổi thông tin cơ bản
+  var home = helper.getHomeCountry(proxyData.location);
+  console.log("Nơi ở ", proxyData.location);
+  await page.waitFor(2000);
+  await helper.typeBasicInfor(page, home); //Nơi ở
+  console.log("Quê quán ", proxyData.location);
+  await page.waitFor(2000);
+  await helper.typeBasicInfor(page, home); //quê quán
+  var school = helper.getSchool(proxyData.location);
+  await page.waitFor(1500);
+  await helper.typeBasicInfor(page, school);
+  var University = helper.getUniversity(proxyData.location);
+  await page.waitFor(1500);
+  await helper.typeBasicInfor(page, University);
+  var company = helper.getCompany(proxyData.location);
+  console.log("đang điền thông tin công ty ", company);
+  await page.waitFor(1500);
+  await helper.typeBasicInfor(page, company);
+  try {
+    try {
+      await page.waitForSelector("div.uiOverlayFooter button.layerConfirm", {
+        timeout: 15000
+      });
+    } catch (error) {}
+    await page.waitFor(1000);
+    await page.click("div.uiOverlayFooter button.layerConfirm");
+  } catch (error) {
+    console.log("da co loi", error);
+  }
+
+  try {
+    try {
+      await page.waitForSelector('button[value="deny"]');
+    } catch (error) {}
+    await page.waitFor(500);
+    await page.click('button[value="deny"]');
+  } catch (error) {
+    console.log("da co loi", error);
+  }
+  try {
+    try {
+      await page.waitForSelector('#timeline_info_review_unit a[role="button"]');
+    } catch (error) {}
+    await page.waitFor(500);
+    const btns = await page.$$('#timeline_info_review_unit a[role="button"]');
+    await btns[btns.length - 1].click();
+  } catch (error) {
+    console.log("da co loi", error);
+  }
+  // await page.waitFor(1000 * 60 * 5); // chờ 5 phút để thao tác thủ công
+};
+helper.typeBasicInfor = async (page, text) => {
+  await page.type('input[data-testid="searchable-text-input"]', text, {
+    delay: 100
+  });
+  await page.waitFor(2500);
+  await page.keyboard.press("ArrowDown", { delay: 100 });
+  await page.waitFor(1200);
+  await page.keyboard.press("Enter", { delay: 100 });
+  await page.waitFor(800);
+  try {
+    await page.focus('button[value="confirm"]');
+  } catch (error) {}
+  await page.click('button[value="confirm"]', { delay: 100 });
+  await page.waitFor(1800);
+};
+helper.getSchool = location => {
+  if (location.trim() == "cali") {
+    return helper.randomFromArray(["Chicago Academy High School"]);
+  }
+  if (location.trim() == "hcm") {
+    return helper.randomFromArray(["Trường THPT Thành Nhân - Tp.Hồ Chí Minh"]);
+  }
+  if (location.trim() == "danang") {
+    return helper.randomFromArray(["THPT Quang Trung - Đà Nẵng"]);
+  }
+  if (location.trim() == "hanoi") {
+    return helper.randomFromArray(["THPT chuyên Hà Nội - Amsterdam"]);
+  }
+  if (location.trim() == "sg") {
+    return helper.randomFromArray(["school singapore"]);
+  }
+  if (location.trim() == "us") {
+    return helper.randomFromArray(["Chicago Academy High School"]);
+  }
+  if (location.trim() == "hatinh") {
+    return helper.randomFromArray(["Hà tĩnh, Việt Nam"]);
+  }
+  if (location.trim() == "dongnai") {
+    return helper.randomFromArray(["Đồng nai, Việt Nam"]);
+  }
+  if (location.trim() == "quangnam") {
+    return helper.randomFromArray(["Quảng Nam, Việt Nam"]);
+  } else {
+    return helper.randomFromArray(["Chicago Academy High School"]);
+  }
+};
+helper.getUniversity = location => {
+  if (location.trim() == "cali") {
+    return helper.randomFromArray(["Oxford College of Emory University"]);
+  }
+  if (location.trim() == "hcm") {
+    return helper.randomFromArray(["Đại Học Bách Khoa Hồ Chí Minh"]);
+  }
+  if (location.trim() == "danang") {
+    return helper.randomFromArray(["Đại Học Bách Khoa Hồ Chí Minh"]);
+  }
+  if (location.trim() == "hanoi") {
+    return helper.randomFromArray(["Trường Đại học Bách Khoa Hà Nội"]);
+  }
+  if (location.trim() == "sg") {
+    return helper.randomFromArray(["Singapore Management University"]);
+  }
+  if (location.trim() == "us") {
+    return helper.randomFromArray(["Oxford College of Emory University"]);
+  }
+  if (location.trim() == "hatinh") {
+    return helper.randomFromArray(["Trường Đại học Bách Khoa Hà Nội"]);
+  }
+  if (location.trim() == "dongnai") {
+    return helper.randomFromArray(["Trường Đại học Bách Khoa Hà Nội"]);
+  }
+  if (location.trim() == "quangnam") {
+    return helper.randomFromArray(["Trường Đại học Bách Khoa Hà Nội"]);
+  } else {
+    return helper.randomFromArray(["Oxford College of Emory University"]);
+  }
+};
+helper.getCompany = location => {
+  const vietnamCompanies = [
+    "Thế giới di động",
+    "ngân hàng nông nghiệp",
+    "vnpt",
+    "mobiphone",
+    "petrolimex",
+    "FPT",
+    "viettel",
+    "vnpt",
+    "FPT",
+    "Điện máy xanh"
+  ];
+  if (location.trim() == "cali") {
+    return helper.randomFromArray(["BYK", "petrolimex"]);
+  }
+  if (location.trim() == "hcm") {
+    return helper.randomFromArray(vietnamCompanies);
+  }
+  if (location.trim() == "danang") {
+    return helper.randomFromArray(vietnamCompanies);
+  }
+  if (location.trim() == "hanoi") {
+    return helper.randomFromArray(vietnamCompanies);
+  }
+  if (location.trim() == "sg") {
+    return helper.randomFromArray(["petrolimex"]);
+  }
+  if (location.trim() == "us") {
+    return helper.randomFromArray(["petrolimex", "BYK", "chemicals"]);
+  }
+  if (location.trim() == "hatinh") {
+    return helper.randomFromArray(vietnamCompanies);
+  }
+  if (location.trim() == "dongnai") {
+    return helper.randomFromArray(vietnamCompanies);
+  }
+  if (location.trim() == "quangnam") {
+    return helper.randomFromArray(vietnamCompanies);
+  } else {
+    return helper.randomFromArray(["petrolimex", "BYK", "chemicals"]);
+  }
+};
+helper.getHomeCountry = location => {
+  if (location.trim() == "cali") {
+    return helper.randomFromArray(["Chicago, Illinois"]);
+  }
+  if (location.trim() == "hcm") {
+    return helper.randomFromArray(["Ho Chi Minh City, Vietnam"]);
+  }
+  if (location.trim() == "danang") {
+    return helper.randomFromArray(["Da Nang, Vietnam"]);
+  }
+  if (location.trim() == "hanoi") {
+    return helper.randomFromArray(["Hanoi, Vietnam"]);
+  }
+  if (location.trim() == "hanoi") {
+    return helper.randomFromArray(["Hanoi, Vietnam"]);
+  }
+  if (location.trim() == "sg") {
+    return helper.randomFromArray(["singapore"]);
+  }
+  if (location.trim() == "hatinh") {
+    return helper.randomFromArray(["Hà tĩnh, Việt Nam"]);
+  }
+  if (location.trim() == "dongnai") {
+    return helper.randomFromArray(["Đồng nai, Việt Nam"]);
+  }
+  if (location.trim() == "quangnam") {
+    return helper.randomFromArray(["Quảng Nam, Việt Nam"]);
+  }
+  if (location.trim() == "us") {
+    return helper.randomFromArray(["Chicago, Illinois"]);
+  } else {
+    return helper.randomFromArray(["Chicago, Illinois"]);
+  }
+};
+
 helper.loadDataViaModelName = async (modelName, querry) => {
   try {
     var modelSchemas = mongoose.modelSchemas;
@@ -465,9 +863,15 @@ helper.loadDataViaModelName = async (modelName, querry) => {
     const model = mongoose.model(modelName);
     data = await model.find(querry);
     return data;
-  } catch (error) {}
+  } catch (error) {
+    console.log("da co loi", error);
+  }
 };
-
+helper.joinGroup = require("./jointGroup");
+const outlook = require("../../common/outlook");
+helper.getMails = outlook.getMails;
+helper.getMail = outlook.getMail;
+helper.signin = outlook.signin;
 module.exports.helper = helper;
 
 // const helper = ((window, document) => {

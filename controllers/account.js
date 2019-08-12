@@ -22,6 +22,7 @@ const human = require("../facebook/actions/humanAction");
 var actionModel = mongoose.model("Action");
 const dotenv = require("dotenv");
 dotenv.config();
+var processAction = require("./processAction");
 
 exports.index = async (req, res) => {
   try {
@@ -41,6 +42,31 @@ exports.index = async (req, res) => {
     console.log(error);
   }
 };
+
+exports.createFacebook = async (req, res) => {
+  res.send("đang thực hiện");
+  const action = accountModel.find({
+    _id: "5d48e0454fb0751e7c9428c0"
+  });
+  const _id = req.params.id;
+  const account = await accountModel
+    .findById({
+      _id
+    })
+    .populate("proxies")
+    .populate("userAgents");
+  const proxyData = account.proxies[0];
+  const agentData = account.userAgents[0];
+  browser = await helper.setUpBrowser(account);
+  let bag = {
+    result: {}
+  };
+  page = await browser.newPage();
+  await helper.intializePage(page, agentData.agent);
+  await helper.setCookies(page, account.cookie);
+  processAction.runAction(account, action, page);
+};
+
 exports.createOutlook = async (req, res) => {
   res.send("okie");
   var firstName;
@@ -99,9 +125,11 @@ exports.createOutlook = async (req, res) => {
   // email / username
   // ----------------
 
-  await page.waitFor("#liveSwitch", { visible: true });
-  await page.click("#liveSwitch", { delay: 10 });
-  await page.waitFor(100);
+  try {
+    await page.waitFor("#liveSwitch", { visible: true });
+    await page.click("#liveSwitch", { delay: 10 });
+    await page.waitFor(100);
+  } catch (error) {}
   let error = null;
   do {
     firstName = helper.firstName();
@@ -112,7 +140,8 @@ exports.createOutlook = async (req, res) => {
     username = `${firstName}${lastName}${birthday.year}${
       birthday.day
     }${random}`;
-    await page.type("#MemberName", username, { delay: 40 });
+    let email = `${username}@${emailProvider}`;
+    await page.type("#MemberName", email, { delay: 40 });
     await page.waitFor(250);
     await page.click("#iSignupAction", { delay: 20 });
 
@@ -124,7 +153,7 @@ exports.createOutlook = async (req, res) => {
     if (error) {
       await page.waitFor(1000);
       await page.focus("#MemberName");
-      for (let i = 0; i < username.length + 8; ++i) {
+      for (let i = 0; i < email.length + 8; ++i) {
         await page.keyboard.press("Backspace");
       }
 
@@ -199,7 +228,11 @@ exports.createOutlook = async (req, res) => {
     cookie,
     gender: 1,
     proxies: [proxyData._id],
-    userAgents: [userAgent._id]
+    userAgents: [userAgent._id],
+    dateOfBirth: birthday.day,
+    monthOfBirth: birthday.month,
+    yearOfBirth: birthday.year,
+    gender: 2
   };
   const account = new accountModel({
     _id: new mongoose.Types.ObjectId(),
@@ -245,6 +278,7 @@ exports.createOutlook = async (req, res) => {
 
   // res.send(result);
 };
+exports.getMailsFromOutlook = async (req, res) => {};
 exports.auto = async (req, res) => {
   try {
     let accounts = [];

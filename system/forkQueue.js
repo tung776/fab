@@ -7,6 +7,7 @@ let isAutoMaxWorker = true;
 let memoryUsageAvg = 30;
 let countDone = 0;
 var isProduction = process.env.NODE_ENV === "production";
+var delay = require("delay");
 
 exports.getWorkersWorking = () => {
   return workersWorking.length;
@@ -48,7 +49,7 @@ exports.addQueue = ({ path, data, childHandler }) => {
   queues.push({ path, data, childHandler });
 };
 
-exports.DoTasks = async () => {
+exports.DoTasks = async (delayTime = 1000 * 60 * 1) => {
   if (workersWorking.length >= maxWorkers)
     return {
       isSuccess: false,
@@ -65,7 +66,7 @@ exports.DoTasks = async () => {
   var count = 0;
   while (count < max) {
     const queue = queues[queues.length - 1];
-    if (this.DoTask(queue)) {
+    if (this.DoTask(queue, delayTime)) {
       queues.pop();
     }
     count++;
@@ -86,7 +87,7 @@ exports.isEnoughResource = () => {
   }
   return true;
 };
-exports.DoTask = queue => {
+exports.DoTask = async (queue, delayTime) => {
   if (queue == undefined) return false;
 
   if (!this.isEnoughResource()) {
@@ -96,17 +97,21 @@ exports.DoTask = queue => {
   const { path, data, childHandler } = queue;
   let worker = null;
   var isProduction = process.env.production == "true" ? true : false;
+
   if (isProduction) {
     worker = fork(path);
   } else {
-    worker = fork(path, {
-      // silent: true,
-      execArgv: ["--inspect=10245"]
-    });
+    // worker = fork(path, {
+    //   // silent: true,
+    //   // execArgv: ["--inspect=10245"]
+    // });
+    worker = fork(path);
   }
-  worker = fork(path);
 
-  worker.on("message", childData => {
+  // worker = fork(path);
+
+  worker.on("message", async childData => {
+    await delay(delayTime);
     childHandler(childData);
     if (childData.next) {
       workersWorking = workersWorking.filter(item => {
@@ -114,7 +119,7 @@ exports.DoTask = queue => {
       });
       worker.disconnect();
       const newWork = queues[queues.length - 1];
-      if (this.DoTask(newWork)) {
+      if (this.DoTask(newWork, delayTime)) {
         queues.pop();
       }
     }
@@ -127,6 +132,7 @@ exports.DoTask = queue => {
 
   workersWorking.push(worker);
   countDone++;
+
   return true;
 };
 

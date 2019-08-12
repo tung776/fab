@@ -48,6 +48,17 @@ router.get(
   validateToken,
   accountController.checkAllProxy
 );
+router.get(
+  "/account/getMailsFromOutlook/:id",
+  validateToken,
+  accountController.getMailsFromOutlook
+);
+router.get(
+  "/account/createFacebook/:id",
+  validateToken,
+  accountController.createFacebook
+);
+
 router.get("/account/auto", validateToken, accountController.auto);
 router.get(
   "/account/createOutlook",

@@ -109,6 +109,8 @@
                         <a class="btn btn-outline-success"  href="<%= `/account/${item._id}` %>">Chi Tiết</a>
                         <button name="<%= item._id %>" class="btn btn-outline-success" onclick="checkIp('<%= item._id %>')">Kiểm tra IP</button>
                         <button name="<%= item._id %>" class="btn btn-outline-success" onclick="manual('<%= item._id %>')">Thủ công</button>
+                        <button name="<%= item._id %>" class="btn btn-outline-success" onclick="createFacebook('<%= item._id %>')">Tạo tài khoản</button>
+                        <button name="<%= item._id %>" class="btn btn-outline-success" onclick="getMails('<%= item._id %>')">Lấy thư</button>
                         <button type="button" class="btn btn-outline-danger" onClick = "del('<%= item._id %>')">Xóa</button>
                         
                         <% if(item.status) { %>                        
@@ -238,6 +240,16 @@
         }
         var manual = function (_id) {
             axios.get(`/account/manual/${_id}`)
+                .then()
+                .catch()
+        }
+        var getMails = function (_id) {
+            axios.get(`/account/getMailsFromOutlook/${_id}`)
+                .then()
+                .catch()
+        }
+        var createFacebook = function (_id) {
+            axios.get(`/account/createFacebook/${_id}`)
                 .then()
                 .catch()
         }

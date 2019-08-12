@@ -306,7 +306,9 @@ exports.newTask = async (req, res) => {
   }
 };
 exports.new = async (req, res) => {
-  const accounts = await accountModel.find();
+  const accounts = await accountModel.find({
+    status: { $not: /checkpoint/ }
+  });
   const chainActions = await chainActionModel.find();
   return res.render("task/add", {
     accounts: accounts,
@@ -338,7 +340,9 @@ exports.detail = async (req, res) => {
       })
       .populate("accounts");
     //   .populate("actions");
-    const accounts = await accountModel.find();
+    const accounts = await accountModel.find({
+      status: { $not: /checkpoint/ }
+    });
     return res.render("task/update", {
       accounts: accounts,
       task: task,
