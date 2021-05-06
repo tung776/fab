@@ -57,7 +57,7 @@
     "request": "^2.88.0",
     "socket.io": "^2.2.0",
     "tempy": "^0.3.0",
-    "underscore": "^1.9.1",
+    "underscore": "^1.12.1",
     "vm2": "^3.8.2",
     "winston": "^3.2.1"
   }
